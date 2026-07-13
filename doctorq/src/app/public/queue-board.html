@@ -1,0 +1,146 @@
+<app-public-header />
+
+<section class="hero">
+  <div class="hero-inner">
+    <span class="live">
+      <span class="dot"></span>
+      Live · updates automatically
+    </span>
+    <h1>Know the queue before you leave home.</h1>
+    <p>
+      Current queue numbers for every clinic running today. Check whether your doctor is still
+      accepting patients — and skip the trip if the cut-off has already passed.
+    </p>
+    <div class="today">{{ today | date: 'EEEE, d MMMM y' }}</div>
+  </div>
+</section>
+
+<main class="page">
+  <div class="section-head">
+    <div>
+      <h2 class="page-title">Today's clinics</h2>
+      <p class="page-subtitle">
+        @if (loading()) {
+          Loading queues…
+        } @else {
+          {{ visible().length }} clinic{{ visible().length === 1 ? '' : 's' }} listed ·
+          {{ openCount() }} still accepting patients
+        }
+      </p>
+    </div>
+
+    <div class="filters">
+      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+        <mat-label>Search doctor or specialty</mat-label>
+        <mat-icon matPrefix>search</mat-icon>
+        <input matInput [value]="search()" (input)="onSearch($event)" placeholder="e.g. cardiology" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+        <mat-label>Hospital</mat-label>
+        <mat-select [value]="hospitalFilter()" (valueChange)="hospitalFilter.set($event)">
+          <mat-option value="all">All hospitals</mat-option>
+          @for (hospital of hospitals(); track hospital.id) {
+            <mat-option [value]="hospital.id">{{ hospital.name }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
+
+  @if (loading()) {
+    <div class="empty-state"><mat-spinner diameter="36" /></div>
+  } @else if (!visible().length) {
+    <div class="empty-state surface-card">
+      <mat-icon>event_busy</mat-icon>
+      <h3>No clinics match</h3>
+      <p>
+        Nothing is running under these filters right now. Queues appear here as soon as the front
+        desk opens them for the day.
+      </p>
+    </div>
+  } @else {
+    <div class="grid">
+      @for (entry of visible(); track entry.session.id) {
+        <a class="card surface-card" [routerLink]="['/q', entry.session.id]">
+          <div class="card-head">
+            <div class="avatar">
+              @if (entry.doctor?.photoUrl) {
+                <img [src]="entry.doctor!.photoUrl" [alt]="entry.doctor!.fullName" />
+              } @else {
+                <span>{{ initials(entry.doctor?.fullName) }}</span>
+              }
+            </div>
+            <div class="who">
+              <h3>{{ entry.doctor?.fullName ?? 'Unassigned doctor' }}</h3>
+              <p class="specialty">{{ entry.doctor?.specialty }}</p>
+            </div>
+          </div>
+
+          <div class="where">
+            <mat-icon>location_on</mat-icon>
+            <span>
+              {{ entry.hospital?.name }}
+              @if (entry.session.room) {
+                <span class="room">· Room {{ entry.session.room }}</span>
+              }
+            </span>
+          </div>
+
+          <div class="now">
+            <div class="now-label">Now serving</div>
+            <div class="now-number numeral">
+              @if (entry.session.nowServing > 0) {
+                {{ entry.session.nowServing }}
+              } @else {
+                <span class="not-started">—</span>
+              }
+            </div>
+            @if (entry.session.nowServing === 0) {
+              <div class="now-hint">Not started yet</div>
+            } @else if (entry.session.priorityCall) {
+              <div class="now-hint priority">
+                <mat-icon>bolt</mat-icon>
+                Called ahead of turn — lower numbers keep their place
+              </div>
+            }
+          </div>
+
+          <div class="stats">
+            <div>
+              <span class="stat numeral">{{ entry.waiting }}</span>
+              <span class="stat-label">waiting</span>
+            </div>
+            <div>
+              <span class="stat numeral">{{ entry.session.lastIssued }}</span>
+              <span class="stat-label">last number</span>
+            </div>
+            <div>
+              <span class="stat numeral">
+                {{ entry.slotsLeft === null ? '∞' : entry.slotsLeft }}
+              </span>
+              <span class="stat-label">slots left</span>
+            </div>
+          </div>
+
+          @if (entry.session.note) {
+            <div class="note">
+              <mat-icon>campaign</mat-icon>
+              <span>{{ entry.session.note }}</span>
+            </div>
+          }
+
+          <div class="card-foot">
+            <app-status-chip
+              [status]="entry.session.status"
+              [full]="entry.slotsLeft === 0"
+            />
+            @if (entry.acceptingNewPatients) {
+              <span class="eta">{{ waitLabel(entry.estimatedWaitMinutes) }}</span>
+            }
+          </div>
+        </a>
+      }
+    </div>
+  }
+</main>

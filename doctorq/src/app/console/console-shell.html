@@ -1,0 +1,85 @@
+<mat-sidenav-container>
+  <mat-sidenav mode="side" opened disableClose>
+    <div class="brand">
+      <span class="mark"><mat-icon>graphic_eq</mat-icon></span>
+      <div>
+        <span class="name">Doctor<b>Q</b></span>
+        <span class="tag" [class.admin]="isAdmin()">
+          {{ isAdmin() ? 'Admin console' : 'Staff console' }}
+        </span>
+      </div>
+    </div>
+
+    <nav>
+      @for (item of nav(); track item.path) {
+        <a
+          [routerLink]="item.path"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: false }"
+        >
+          <mat-icon>{{ item.icon }}</mat-icon>
+          <span>{{ item.label }}</span>
+          @if (badgeFor(item.path); as count) {
+            <span class="badge">{{ count }}</span>
+          }
+        </a>
+      }
+    </nav>
+
+    <div class="sidenav-foot">
+      @if (!isAdmin()) {
+        <div class="scope">
+          <span class="scope-label">You manage</span>
+          @if (myDoctors().length) {
+            @for (doctor of myDoctors(); track doctor.id) {
+              <span class="scope-doctor">{{ doctor.fullName }}</span>
+            }
+          } @else {
+            <span class="scope-none">No doctors yet</span>
+          }
+        </div>
+      }
+
+      <a class="board-link" routerLink="/" target="_blank" rel="noopener">
+        <mat-icon>open_in_new</mat-icon>
+        <span>View public board</span>
+      </a>
+
+      <button class="account" [matMenuTriggerFor]="menu">
+        <span class="avatar">{{ initials(user()?.displayName || user()?.email) }}</span>
+        <span class="who">
+          <span class="who-name">{{ user()?.displayName || 'Staff' }}</span>
+          <span class="who-role">{{ isAdmin() ? 'Administrator' : 'Staff' }}</span>
+        </span>
+        <mat-icon>more_vert</mat-icon>
+      </button>
+
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item (click)="signOut()">
+          <mat-icon>logout</mat-icon>
+          <span>Sign out</span>
+        </button>
+      </mat-menu>
+    </div>
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    @if (isApproved()) {
+      <router-outlet />
+    } @else {
+      <!-- Signed in, but an admin has not let them in yet. Nothing they could do here would be
+           permitted by the rules anyway, so show the reason instead of an empty console. -->
+      <div class="page">
+        <div class="empty-state surface-card">
+          <mat-icon>hourglass_top</mat-icon>
+          <h3>Waiting for approval</h3>
+          <p>
+            Your account is set up, but an administrator has to let it through before you can add
+            doctors or run a queue. You'll get straight in once they do — no need to sign up again.
+          </p>
+          <button mat-stroked-button (click)="signOut()">Sign out</button>
+        </div>
+      </div>
+    }
+  </mat-sidenav-content>
+</mat-sidenav-container>

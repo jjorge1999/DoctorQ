@@ -1,0 +1,198 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Admin-set policy: how much a staff member can do without being waved through. A missing
+    // document, or a missing flag, means the permissive default — turning a gate ON is the
+    // explicit act, so an unconfigured project keeps working.
+    function settings() {
+      return exists(/databases/$(database)/documents/settings/access)
+        ? get(/databases/$(database)/documents/settings/access).data
+        : {};
+    }
+
+    function autoApproveStaff() {
+      return settings().get('autoApproveStaff', true);
+    }
+
+    function autoApproveDoctors() {
+      return settings().get('autoApproveDoctors', true);
+    }
+
+    function allowStaffHospitals() {
+      return settings().get('allowStaffHospitals', false);
+    }
+
+    function autoApproveHospitals() {
+      return settings().get('autoApproveHospitals', false);
+    }
+
+    // Console access is granted by the existence of a users/{uid} document, not by holding an
+    // Auth account. An Auth user with no profile can read the public board and nothing else.
+    function hasProfile() {
+      return request.auth != null
+        && exists(/databases/$(database)/documents/users/$(request.auth.uid));
+    }
+
+    // Every field read below is defaulted. A rule that throws denies the request, which looks
+    // like security but isn't: the next refactor can just as easily make it throw for someone
+    // who should be allowed. These stay total so a denial is always a decision.
+    function profile() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
+    }
+
+    // Role is read without consulting approval, so an `approved: false` written onto an admin
+    // could never lock the last administrator out of their own project.
+    function role() {
+      return hasProfile() ? profile().get('role', 'staff') : 'none';
+    }
+
+    function isAdmin() {
+      return role() == 'admin';
+    }
+
+    // An account still awaiting approval can sign in and see that it is waiting — and nothing
+    // else. Every grant below runs through isStaff(), so this is where a pending account stops.
+    function isStaff() {
+      return hasProfile() && (isAdmin() || profile().get('approved', true) == true);
+    }
+
+    function assignedDoctors() {
+      return isStaff() ? profile().get('doctorIds', []) : [];
+    }
+
+    // Defaults to '' rather than reading a field that may not exist: a doctor deleted mid-request,
+    // or one created before ownership existed, must deny cleanly instead of throwing.
+    function doctorOwner(doctorId) {
+      return exists(/databases/$(database)/documents/doctors/$(doctorId))
+        ? get(/databases/$(database)/documents/doctors/$(doctorId)).data.get('ownerUid', '')
+        : '';
+    }
+
+    // A doctor still awaiting approval must not reach the public board — and a queue is exactly
+    // how they would get there.
+    function doctorApproved(doctorId) {
+      return exists(/databases/$(database)/documents/doctors/$(doctorId))
+        && get(/databases/$(database)/documents/doctors/$(doctorId)).data.get('approved', true) == true;
+    }
+
+    function ownsDoctor(doctorId) {
+      return isStaff() && doctorOwner(doctorId) == request.auth.uid;
+    }
+
+    /**
+     * A staff member acts on the doctors they created themselves, plus any an admin has
+     * explicitly handed them. An admin acts on all of them. Creating a doctor needs no
+     * administrator, which is what lets a new clinic get running on its own.
+     */
+    function canManageDoctor(doctorId) {
+      return isAdmin() || ownsDoctor(doctorId) || doctorId in assignedDoctors();
+    }
+
+    // The access policy itself. World-readable — the signup form has to know whether it is
+    // creating an approved account, and the rules below check the same document. Admin-writable.
+    match /settings/{docId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /users/{uid} {
+      allow read: if request.auth != null && (request.auth.uid == uid || isAdmin());
+
+      // Self-registration is fixed at the least-privileged role with no doctors attached, so
+      // nobody can sign themselves up as an admin or assign themselves a doctor. `approved` is
+      // pinned to whatever the policy says, so a hand-crafted request cannot wave itself through
+      // an approval gate the admin has switched on.
+      allow create: if request.auth != null
+        && request.auth.uid == uid
+        && request.resource.data.role == 'staff'
+        && request.resource.data.doctorIds == []
+        && request.resource.data.get('approved', true) == autoApproveStaff();
+
+      // Only an admin may change a role, a doctor assignment, or an approval. A user may edit
+      // their own profile as long as all three stay exactly as they were.
+      allow update: if isAdmin()
+        || (request.auth != null
+            && request.auth.uid == uid
+            && request.resource.data.role == resource.data.role
+            && request.resource.data.doctorIds == resource.data.doctorIds
+            && request.resource.data.get('approved', true) == resource.data.get('approved', true));
+
+      // An admin cannot delete their own account out from under themselves.
+      allow delete: if isAdmin() && request.auth.uid != uid;
+    }
+
+    // Hospitals: public reference data, shared by everyone, so the directory is curated rather
+    // than open — otherwise the board ends up with the same hospital spelled four ways.
+    // `allowStaffHospitals` opens creation to staff; `autoApproveHospitals` decides whether what
+    // they add is live at once or waits for an admin. Editing and deleting stay with the admin
+    // and the staff member who added it.
+    match /hospitals/{id} {
+      allow read: if true;
+
+      allow create: if isAdmin()
+        || (isStaff()
+            && allowStaffHospitals()
+            && request.resource.data.get('ownerUid', '') == request.auth.uid
+            && request.resource.data.get('approved', true) == autoApproveHospitals());
+
+      allow update: if isAdmin()
+        || (isStaff()
+            && resource.data.get('ownerUid', '') == request.auth.uid
+            && request.resource.data.get('ownerUid', '') == resource.data.get('ownerUid', '')
+            // Approving your own hospital is the admin's call, not yours.
+            && request.resource.data.get('approved', true) == resource.data.get('approved', true));
+
+      allow delete: if isAdmin()
+        || (isStaff() && resource.data.get('ownerUid', '') == request.auth.uid);
+    }
+
+    // Doctors: public reference data.
+    //
+    // Any staff member may add a doctor, but only as their own: `ownerUid` must be their uid, so
+    // nobody can create a doctor already "belonging" to someone else. Owners then have full say
+    // over that profile. A doctor merely *assigned* by an admin is a weaker grant — the holder
+    // can keep the profile current but cannot re-point it at other hospitals or delete it.
+    match /doctors/{doctorId} {
+      allow read: if true;
+
+      // `approved` is pinned to the policy: with autoApproveDoctors off, a staff member's new
+      // doctor can only be written as pending. They cannot publish themselves onto the board.
+      allow create: if isAdmin()
+        || (isStaff()
+            && request.resource.data.get('ownerUid', '') == request.auth.uid
+            && request.resource.data.get('approved', true) == autoApproveDoctors());
+
+      allow update: if isAdmin()
+        // Ownership cannot be transferred by editing — that would be a way to take someone
+        // else's doctor, or dump one on them. Nor can the holder approve their own doctor.
+        || (ownsDoctor(doctorId)
+            && request.resource.data.get('ownerUid', '') == resource.data.get('ownerUid', '')
+            && request.resource.data.get('approved', true) == resource.data.get('approved', true))
+        || (doctorId in assignedDoctors()
+            && request.resource.data.get('ownerUid', '') == resource.data.get('ownerUid', '')
+            && request.resource.data.get('approved', true) == resource.data.get('approved', true)
+            && request.resource.data.hospitalIds == resource.data.hospitalIds);
+
+      allow delete: if isAdmin() || ownsDoctor(doctorId);
+    }
+
+    // Queues hold no patient identifiers — only counters — so public read is safe and is the
+    // whole point of the board. Writes are scoped to the doctor the queue belongs to.
+    match /queues/{id} {
+      allow read: if true;
+      allow create: if canManageDoctor(request.resource.data.doctorId)
+        && doctorApproved(request.resource.data.doctorId);
+      // The doctor a queue belongs to is fixed at creation: letting it move would let a staff
+      // member walk a queue they own onto a doctor they don't.
+      allow update: if canManageDoctor(resource.data.doctorId)
+        && request.resource.data.doctorId == resource.data.doctorId;
+      allow delete: if canManageDoctor(resource.data.doctorId);
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

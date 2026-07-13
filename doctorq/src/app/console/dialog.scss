@@ -1,0 +1,74 @@
+// Per-dialog extras. The skeleton (.dlg, .dlg-head, .dlg-body, .dlg-foot, .dlg-grid)
+// lives in the global stylesheet so every dialog is laid out the same way.
+
+.spacer {
+  flex: 1;
+}
+
+.full {
+  width: 100%;
+}
+
+.limit-box {
+  padding: 16px;
+  border: 1px solid var(--app-border);
+  border-radius: 12px;
+}
+
+.cap-field {
+  width: 100%;
+  max-width: 280px;
+  margin-top: 14px;
+}
+
+.avatar-preview {
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  flex: none;
+  border-radius: 16px;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--mat-sys-primary) 13%, transparent);
+  color: var(--mat-sys-primary);
+  font-size: 1.05rem;
+  font-weight: 650;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.who-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 18px;
+}
+
+.who-row .who-text {
+  min-width: 0;
+
+  strong {
+    display: block;
+    font-size: 1rem;
+    font-weight: 620;
+  }
+
+  span {
+    color: var(--mat-sys-on-surface-variant);
+    font-size: 0.86rem;
+  }
+}
+
+@media (max-width: 719px) {
+  .spacer {
+    display: none;
+  }
+
+  .cap-field {
+    max-width: none;
+  }
+}

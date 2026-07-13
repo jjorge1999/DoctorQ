@@ -1,0 +1,104 @@
+<div class="split">
+  <aside class="pitch">
+    <a class="brand" routerLink="/">
+      <span class="mark"><mat-icon>graphic_eq</mat-icon></span>
+      <span class="name">Doctor<b>Q</b></span>
+    </a>
+
+    <h1>The console behind the board.</h1>
+    <p>
+      Call the next number, hand out slots, declare a cut-off, and keep doctor and hospital records
+      current. Every change lands on the public board the instant you make it.
+    </p>
+
+    <ul>
+      <li><mat-icon>bolt</mat-icon> Realtime queue control</li>
+      <li><mat-icon>stethoscope</mat-icon> Doctor profiles and specialties</li>
+      <li><mat-icon>local_hospital</mat-icon> Hospital directory</li>
+      <li><mat-icon>shield</mat-icon> Numbers only — no patient records held</li>
+    </ul>
+  </aside>
+
+  <main class="form-side">
+    <div class="card surface-card">
+      <h2>Staff access</h2>
+      <p class="sub">Sign in to manage queues, doctors and hospitals.</p>
+
+      @if (error()) {
+        <div class="error" role="alert">
+          <mat-icon>error</mat-icon>
+          <span>{{ error() }}</span>
+        </div>
+      }
+
+      <mat-tab-group animationDuration="0ms">
+        <mat-tab label="Sign in">
+          <form [formGroup]="signInForm" (ngSubmit)="signIn()">
+            <mat-form-field appearance="outline">
+              <mat-label>Work email</mat-label>
+              <mat-icon matPrefix>mail</mat-icon>
+              <input matInput type="email" formControlName="email" autocomplete="username" />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Password</mat-label>
+              <mat-icon matPrefix>key</mat-icon>
+              <input
+                matInput
+                type="password"
+                formControlName="password"
+                autocomplete="current-password"
+              />
+            </mat-form-field>
+
+            <button mat-flat-button type="submit" [disabled]="busy() || signInForm.invalid">
+              Sign in
+            </button>
+          </form>
+        </mat-tab>
+
+        <mat-tab label="Create account">
+          <p class="tab-note">
+            Sign up and start straight away: add your doctor, open their queue, and it appears on
+            the public board. No administrator needed.
+          </p>
+          <form [formGroup]="registerForm" (ngSubmit)="register()">
+            <mat-form-field appearance="outline">
+              <mat-label>Full name</mat-label>
+              <mat-icon matPrefix>person</mat-icon>
+              <input matInput formControlName="name" autocomplete="name" />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Work email</mat-label>
+              <mat-icon matPrefix>mail</mat-icon>
+              <input matInput type="email" formControlName="email" autocomplete="username" />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Password</mat-label>
+              <mat-icon matPrefix>key</mat-icon>
+              <input
+                matInput
+                type="password"
+                formControlName="password"
+                autocomplete="new-password"
+              />
+              <mat-hint>At least 6 characters.</mat-hint>
+            </mat-form-field>
+
+            <button mat-flat-button type="submit" [disabled]="busy() || registerForm.invalid">
+              Create account
+            </button>
+          </form>
+        </mat-tab>
+      </mat-tab-group>
+
+      @if (busy()) {
+        <mat-progress-bar mode="indeterminate" />
+      }
+    </div>
+
+    <a class="back" routerLink="/">← Back to the public queue board</a>
+  </main>
+</div>

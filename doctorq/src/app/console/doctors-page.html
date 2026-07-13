@@ -1,0 +1,126 @@
+<div class="page">
+  <div class="section-head">
+    <div>
+      <h1 class="page-title">Doctors</h1>
+      <p class="page-subtitle">
+        @if (isAdmin()) {
+          Profiles patients see next to the queue number. {{ doctors().length }} on file.
+        } @else {
+          The doctors you manage. Add your own — you don't need an administrator.
+        }
+      </p>
+    </div>
+    <button mat-flat-button [disabled]="!hasHospitals()" (click)="add()">
+      <mat-icon>add</mat-icon>
+      Add doctor
+    </button>
+  </div>
+
+  @if (!hasHospitals()) {
+    <div class="notice">
+      <mat-icon>info</mat-icon>
+      <span>
+        No hospitals exist yet, and a doctor needs one to hold a clinic in.
+        @if (isAdmin()) {
+          Add a hospital first.
+        } @else {
+          The hospital directory is maintained by an administrator — ask them to add yours.
+        }
+      </span>
+    </div>
+  }
+
+  @if (!doctors().length) {
+    <div class="empty-state surface-card">
+      <mat-icon>stethoscope</mat-icon>
+      <h3>No doctors yet</h3>
+      @if (isAdmin()) {
+        <p>Add the doctors who hold clinics, and they will be available when you open a queue.</p>
+      } @else {
+        <p>
+          Add the doctor whose clinic you run. They are yours to manage, and you can open their
+          queue straight away.
+        </p>
+      }
+      <button mat-flat-button [disabled]="!hasHospitals()" (click)="add()">
+        <mat-icon>add</mat-icon>
+        Add doctor
+      </button>
+    </div>
+  } @else {
+    <div class="table-wrap surface-card">
+      <table mat-table [dataSource]="doctors()">
+        <ng-container matColumnDef="doctor">
+          <th mat-header-cell *matHeaderCellDef>Doctor</th>
+          <td mat-cell *matCellDef="let doctor">
+            <div class="person">
+              <div class="avatar">
+                @if (doctor.photoUrl) {
+                  <img [src]="doctor.photoUrl" [alt]="doctor.fullName" />
+                } @else {
+                  <span>{{ initials(doctor.fullName) }}</span>
+                }
+              </div>
+              <div>
+                <div class="strong">
+                  {{ doctor.fullName }}
+                  @if (isPending(doctor)) {
+                    <span class="pending">Awaiting approval</span>
+                  } @else if (isAssignedNotOwned(doctor)) {
+                    <span class="you">Assigned</span>
+                  }
+                </div>
+                @if (doctor.bio) {
+                  <div class="muted clamp">{{ doctor.bio }}</div>
+                }
+              </div>
+            </div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="specialty">
+          <th mat-header-cell *matHeaderCellDef>Specialty</th>
+          <td mat-cell *matCellDef="let doctor">
+            <span class="pill">{{ doctor.specialty }}</span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="hospitals">
+          <th mat-header-cell *matHeaderCellDef>Hospitals</th>
+          <td mat-cell *matCellDef="let doctor" class="muted">
+            {{ hospitalNames(doctor.hospitalIds) }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="licence">
+          <th mat-header-cell *matHeaderCellDef>Licence</th>
+          <td mat-cell *matCellDef="let doctor" class="muted mono">{{ doctor.licenseNo || '—' }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef aria-label="Actions"></th>
+          <td mat-cell *matCellDef="let doctor" class="right">
+            <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Doctor actions">
+              <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu">
+              <button mat-menu-item (click)="edit(doctor)">
+                <mat-icon>edit</mat-icon>
+                <span>Edit profile</span>
+              </button>
+              @if (canDelete(doctor)) {
+                <button mat-menu-item (click)="remove(doctor)">
+                  <mat-icon>delete</mat-icon>
+                  <span>Remove</span>
+                </button>
+              }
+            </mat-menu>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="columns"></tr>
+        <tr mat-row *matRowDef="let row; columns: columns"></tr>
+      </table>
+    </div>
+  }
+</div>

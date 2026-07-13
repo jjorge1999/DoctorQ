@@ -1,0 +1,263 @@
+:host {
+  display: block;
+}
+
+.totals {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+.total {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 18px 20px;
+
+  span {
+    font-size: 1.75rem;
+    font-weight: 680;
+    letter-spacing: -0.02em;
+  }
+
+  small {
+    font-size: 0.72rem;
+    font-weight: 550;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--mat-sys-on-surface-variant);
+  }
+}
+
+.queues {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+  gap: 20px;
+}
+
+.queue {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 22px;
+}
+
+header {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+
+  // The status chip earns its own line: inline, it squeezed the doctor's name
+  // into a one-word-per-line column on narrower cards.
+  .title-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    width: 100%;
+  }
+
+  .who {
+    flex: 1;
+    min-width: 0;
+  }
+
+  h2 {
+    margin: 0;
+    font-size: 1.05rem;
+    font-weight: 640;
+    letter-spacing: -0.015em;
+  }
+
+  p {
+    margin: 3px 0 0;
+    color: var(--mat-sys-on-surface-variant);
+    font-size: 0.83rem;
+    line-height: 1.45;
+  }
+}
+
+.body {
+  display: flex;
+  align-items: stretch;
+  gap: 16px;
+}
+
+.serving {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 128px;
+  padding: 14px;
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--mat-sys-primary) 8%, var(--mat-sys-surface));
+  border: 1px solid color-mix(in srgb, var(--mat-sys-primary) 18%, transparent);
+
+  .label {
+    font-size: 0.65rem;
+    font-weight: 650;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--mat-sys-on-surface-variant);
+  }
+
+  .value {
+    font-size: 2.9rem;
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    color: var(--mat-sys-primary);
+  }
+}
+
+.metrics {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px 8px;
+  flex: 1;
+  align-content: center;
+
+  > div {
+    display: flex;
+    flex-direction: column;
+  }
+
+  span {
+    font-size: 1.12rem;
+    font-weight: 640;
+  }
+
+  small {
+    font-size: 0.68rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--mat-sys-on-surface-variant);
+  }
+}
+
+.waiting-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px 14px;
+  border: 1px solid var(--app-border);
+  border-radius: 12px;
+}
+
+.waiting-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.priority-flag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--status-paused);
+
+  mat-icon {
+    width: 14px;
+    height: 14px;
+    font-size: 14px;
+  }
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.num-chip {
+  min-width: 38px;
+  padding: 6px 10px;
+  border: 1px solid var(--app-border);
+  border-radius: 9px;
+  background: var(--mat-sys-surface);
+  color: var(--mat-sys-on-surface);
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background 120ms ease,
+    border-color 120ms ease;
+
+  &:hover:not(:disabled) {
+    border-color: var(--mat-sys-primary);
+    background: color-mix(in srgb, var(--mat-sys-primary) 10%, transparent);
+    color: var(--mat-sys-primary);
+  }
+
+  // The one that would be called anyway, so it does not look like a jump.
+  &.up-next {
+    border-color: color-mix(in srgb, var(--mat-sys-primary) 45%, transparent);
+    background: color-mix(in srgb, var(--mat-sys-primary) 12%, transparent);
+    color: var(--mat-sys-primary);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: default;
+  }
+}
+
+footer {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: auto;
+
+  button {
+    white-space: nowrap;
+  }
+
+  .next {
+    flex: 1;
+    height: 44px;
+  }
+
+  button[mat-stroked-button] {
+    height: 44px;
+  }
+}
+
+.note {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: var(--status-paused-bg);
+  color: var(--status-paused);
+  font-size: 0.82rem;
+
+  mat-icon {
+    flex: none;
+    width: 17px;
+    height: 17px;
+    font-size: 17px;
+  }
+}
+
+@media (max-width: 520px) {
+  .body {
+    flex-direction: column;
+  }
+
+  .serving {
+    width: 100%;
+  }
+}

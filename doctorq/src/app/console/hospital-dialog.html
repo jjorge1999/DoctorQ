@@ -1,0 +1,63 @@
+<div class="dlg">
+  <header class="dlg-head">
+    <span class="dlg-icon"><mat-icon>local_hospital</mat-icon></span>
+    <div>
+      <h2>{{ hospital ? 'Edit hospital' : 'Add hospital' }}</h2>
+      <p>Shown to patients so they know exactly where to go.</p>
+    </div>
+  </header>
+
+  <div class="dlg-body" mat-dialog-content>
+    <form [formGroup]="form">
+      <section class="dlg-section">
+        <h3 class="legend"><mat-icon>badge</mat-icon> Name</h3>
+        <div class="dlg-grid">
+          <mat-form-field appearance="outline" subscriptSizing="dynamic">
+            <mat-label>Hospital name</mat-label>
+            <mat-icon matPrefix>local_hospital</mat-icon>
+            <input matInput formControlName="name" placeholder="St. Luke's Medical Center" />
+          </mat-form-field>
+        </div>
+      </section>
+
+      <section class="dlg-section">
+        <h3 class="legend"><mat-icon>location_on</mat-icon> Location</h3>
+        <div class="dlg-grid two-col">
+          <mat-form-field appearance="outline" subscriptSizing="dynamic" class="span-2">
+            <mat-label>Street address</mat-label>
+            <mat-icon matPrefix>location_on</mat-icon>
+            <input matInput formControlName="address" />
+            <mat-hint>Used for the patient's directions link.</mat-hint>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" subscriptSizing="dynamic">
+            <mat-label>City</mat-label>
+            <input matInput formControlName="city" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" subscriptSizing="dynamic">
+            <mat-label>Contact number</mat-label>
+            <mat-icon matPrefix>call</mat-icon>
+            <input matInput formControlName="phone" placeholder="Optional" />
+          </mat-form-field>
+        </div>
+      </section>
+    </form>
+
+    @if (error()) {
+      <div class="dlg-error">
+        <mat-icon>error</mat-icon>
+        <span>{{ error() }}</span>
+      </div>
+    }
+  </div>
+
+  <footer class="dlg-foot" mat-dialog-actions>
+    <span class="spacer"></span>
+    <button mat-stroked-button mat-dialog-close>Cancel</button>
+    <button mat-flat-button [disabled]="form.invalid || busy()" (click)="save()">
+      <mat-icon>{{ hospital ? 'save' : 'add' }}</mat-icon>
+      {{ hospital ? 'Save changes' : 'Add hospital' }}
+    </button>
+  </footer>
+</div>

@@ -1,0 +1,103 @@
+<div class="page">
+  <div class="section-head">
+    <div>
+      <h1 class="page-title">Hospitals</h1>
+      <p class="page-subtitle">
+        Locations shown to patients so they know where to go. {{ hospitals().length }} on file.
+        @if (!isAdmin()) {
+          Shared by everyone — an administrator curates the list.
+        }
+      </p>
+    </div>
+    @if (canAdd()) {
+      <button mat-flat-button (click)="add()">
+        <mat-icon>add</mat-icon>
+        Add hospital
+      </button>
+    }
+  </div>
+
+  @if (!hospitals().length) {
+    <div class="empty-state surface-card">
+      <mat-icon>local_hospital</mat-icon>
+      <h3>No hospitals yet</h3>
+      @if (canAdd()) {
+        <p>Start here. Doctors are attached to hospitals, and queues are opened at one of them.</p>
+        <button mat-flat-button (click)="add()">
+          <mat-icon>add</mat-icon>
+          Add hospital
+        </button>
+      } @else {
+        <p>
+          An administrator maintains this directory, and has not added any yet. Ask them to add
+          the hospital you hold clinics in.
+        </p>
+      }
+    </div>
+  } @else {
+    <div class="table-wrap surface-card">
+      <table mat-table [dataSource]="hospitals()">
+        <ng-container matColumnDef="hospital">
+          <th mat-header-cell *matHeaderCellDef>Hospital</th>
+          <td mat-cell *matCellDef="let hospital">
+            <div class="person">
+              <div class="avatar"><mat-icon>local_hospital</mat-icon></div>
+              <div>
+                <div class="strong">
+                  {{ hospital.name }}
+                  @if (isPending(hospital)) {
+                    <span class="pending">Awaiting approval</span>
+                  }
+                </div>
+                <div class="muted clamp">{{ hospital.address }}</div>
+              </div>
+            </div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="city">
+          <th mat-header-cell *matHeaderCellDef>City</th>
+          <td mat-cell *matCellDef="let hospital" class="muted">{{ hospital.city }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="phone">
+          <th mat-header-cell *matHeaderCellDef>Contact</th>
+          <td mat-cell *matCellDef="let hospital" class="muted mono">
+            {{ hospital.phone || '—' }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="doctors">
+          <th mat-header-cell *matHeaderCellDef>Doctors</th>
+          <td mat-cell *matCellDef="let hospital">
+            <span class="pill">{{ doctorCount(hospital.id) }}</span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef aria-label="Actions"></th>
+          <td mat-cell *matCellDef="let hospital" class="right">
+            @if (canEdit(hospital)) {
+              <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Hospital actions">
+                <mat-icon>more_vert</mat-icon>
+              </button>
+              <mat-menu #menu="matMenu">
+                <button mat-menu-item (click)="edit(hospital)">
+                  <mat-icon>edit</mat-icon>
+                  <span>Edit hospital</span>
+                </button>
+                <button mat-menu-item (click)="remove(hospital)">
+                  <mat-icon>delete</mat-icon>
+                  <span>Remove</span>
+                </button>
+              </mat-menu>
+            }
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="columns"></tr>
+        <tr mat-row *matRowDef="let row; columns: columns"></tr>
+      </table>
+    </div>
+  }
+</div>

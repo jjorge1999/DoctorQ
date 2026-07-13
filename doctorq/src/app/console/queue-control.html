@@ -1,0 +1,229 @@
+<div class="page">
+  <div class="section-head">
+    <div>
+      <h1 class="page-title">Queue control</h1>
+      <p class="page-subtitle">
+        {{ today | date: 'EEEE, d MMMM y' }} ·
+        @if (isAdmin()) {
+          all doctors · every change is live on the public board immediately
+        } @else {
+          your doctors · every change is live on the public board immediately
+        }
+      </p>
+    </div>
+    @if (!hasNoDoctors()) {
+      <button mat-flat-button (click)="openQueueDialog()">
+        <mat-icon>add</mat-icon>
+        Open a queue
+      </button>
+    }
+  </div>
+
+  <div class="totals">
+    <div class="total surface-card">
+      <span class="numeral">{{ totals().queues }}</span>
+      <small>Queues today</small>
+    </div>
+    <div class="total surface-card">
+      <span class="numeral">{{ totals().open }}</span>
+      <small>Accepting patients</small>
+    </div>
+    <div class="total surface-card">
+      <span class="numeral">{{ totals().waiting }}</span>
+      <small>Patients waiting</small>
+    </div>
+    <div class="total surface-card">
+      <span class="numeral">{{ totals().served }}</span>
+      <small>Called so far</small>
+    </div>
+  </div>
+
+  @if (loading()) {
+    <div class="empty-state"><mat-spinner diameter="36" /></div>
+  } @else if (awaitingApproval()) {
+    <div class="empty-state surface-card">
+      <mat-icon>hourglass_top</mat-icon>
+      <h3>Your doctor is waiting for approval</h3>
+      <p>
+        An administrator reviews new doctors before they go on the public board. As soon as yours
+        is approved you can open their queue here — nothing else for you to do.
+      </p>
+      <a mat-stroked-button routerLink="/console/doctors">View doctors</a>
+    </div>
+  } @else if (hasNoDoctors()) {
+    <div class="empty-state surface-card">
+      <mat-icon>stethoscope</mat-icon>
+      <h3>Add a doctor to get started</h3>
+      <p>
+        A queue belongs to a doctor, so add yours first. The doctor is yours to manage, and their
+        queue goes live the moment you open it.
+      </p>
+      <a mat-flat-button routerLink="/console/doctors">
+        <mat-icon>add</mat-icon>
+        Add a doctor
+      </a>
+    </div>
+  } @else if (!board().length) {
+    <div class="empty-state surface-card">
+      <mat-icon>confirmation_number</mat-icon>
+      <h3>No queues open today</h3>
+      <p>
+        Open a queue for a doctor to start handing out numbers. It appears on the public board the
+        moment you create it.
+      </p>
+      <button mat-flat-button (click)="openQueueDialog()">
+        <mat-icon>add</mat-icon>
+        Open a queue
+      </button>
+    </div>
+  } @else {
+    <div class="queues">
+      @for (entry of board(); track entry.session.id) {
+        <article class="queue surface-card">
+          <header>
+            <div class="title-row">
+              <div class="who">
+                <h2>{{ entry.doctor?.fullName ?? 'Unassigned doctor' }}</h2>
+                <p>
+                  {{ entry.doctor?.specialty }} · {{ entry.hospital?.name }}
+                  @if (entry.session.room) {
+                    · Room {{ entry.session.room }}
+                  }
+                </p>
+              </div>
+              <button mat-icon-button [matMenuTriggerFor]="more" aria-label="More actions">
+                <mat-icon>more_vert</mat-icon>
+              </button>
+            </div>
+            <app-status-chip [status]="entry.session.status" [full]="entry.slotsLeft === 0" />
+
+            <mat-menu #more="matMenu">
+              @for (option of statusOptions; track option.value) {
+                <button
+                  mat-menu-item
+                  [disabled]="entry.session.status === option.value"
+                  (click)="setStatus(entry, option.value)"
+                >
+                  <mat-icon>{{ option.icon }}</mat-icon>
+                  <span>{{ option.label }}</span>
+                </button>
+              }
+              <button mat-menu-item (click)="editQueue(entry)">
+                <mat-icon>tune</mat-icon>
+                <span>Queue settings</span>
+              </button>
+              <button mat-menu-item (click)="removeQueue(entry)">
+                <mat-icon>delete</mat-icon>
+                <span>Delete queue</span>
+              </button>
+            </mat-menu>
+          </header>
+
+          <div class="body">
+            <div class="serving">
+              <span class="label">Now serving</span>
+              <span class="value numeral">
+                {{ entry.session.nowServing > 0 ? entry.session.nowServing : '—' }}
+              </span>
+            </div>
+
+            <div class="metrics">
+              <div>
+                <span class="numeral">{{ entry.session.lastIssued }}</span>
+                <small>Last issued</small>
+              </div>
+              <div>
+                <span class="numeral">{{ entry.waiting }}</span>
+                <small>Waiting</small>
+              </div>
+              <div>
+                <span class="numeral">
+                  {{ entry.slotsLeft === null ? '∞' : entry.slotsLeft }}
+                </span>
+                <small>Slots left</small>
+              </div>
+              <div>
+                <span class="numeral">{{ entry.estimatedWaitMinutes }}m</span>
+                <small>Est. wait</small>
+              </div>
+            </div>
+          </div>
+
+          @if (entry.waitingNumbers.length) {
+            <div class="waiting-list">
+              <div class="waiting-head">
+                <span>Waiting — tap a number to call it next</span>
+                @if (entry.session.priorityCall) {
+                  <span class="priority-flag">
+                    <mat-icon>bolt</mat-icon>
+                    {{ entry.session.nowServing }} called out of order
+                  </span>
+                }
+              </div>
+              <div class="chips">
+                @for (number of entry.waitingNumbers; track number) {
+                  <button
+                    class="num-chip numeral"
+                    [class.up-next]="number === entry.waitingNumbers[0]"
+                    [disabled]="isBusy(entry.session.id)"
+                    [matTooltip]="
+                      number === entry.waitingNumbers[0]
+                        ? 'Next in line — call it'
+                        : 'Call ' + number + ' ahead of its turn'
+                    "
+                    (click)="callNumber(entry, number)"
+                  >
+                    {{ number }}
+                  </button>
+                }
+              </div>
+            </div>
+          }
+
+          <footer>
+            <button
+              mat-flat-button
+              class="next"
+              [disabled]="isBusy(entry.session.id) || entry.waiting === 0"
+              [matTooltip]="entry.waiting === 0 ? 'Nobody is waiting' : 'Call the next patient'"
+              (click)="callNext(entry)"
+            >
+              <mat-icon>skip_next</mat-icon>
+              Call next
+            </button>
+
+            <button
+              mat-stroked-button
+              [disabled]="isBusy(entry.session.id) || !entry.acceptingNewPatients"
+              [matTooltip]="
+                entry.acceptingNewPatients
+                  ? 'Hand the next number to a walk-in'
+                  : 'Queue is not accepting patients'
+              "
+              (click)="issueNumber(entry)"
+            >
+              <mat-icon>add</mat-icon>
+              Add to queue
+            </button>
+
+            <button
+              mat-icon-button
+              [disabled]="isBusy(entry.session.id) || entry.session.nowServing === 0"
+              matTooltip="Step back one number"
+              (click)="callPrevious(entry)"
+            >
+              <mat-icon>undo</mat-icon>
+            </button>
+          </footer>
+
+          @if (entry.session.note) {
+            <p class="note">
+              <mat-icon>campaign</mat-icon>
+              {{ entry.session.note }}
+            </p>
+          }
+        </article>
+      }
+    </div>
+  }
+</div>

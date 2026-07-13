@@ -1,0 +1,128 @@
+<div class="page narrow">
+  <div class="section-head">
+    <div>
+      <h1 class="page-title">Approvals</h1>
+      <p class="page-subtitle">
+        @if (total()) {
+          {{ total() }} item{{ total() === 1 ? '' : 's' }} waiting on you.
+        } @else {
+          Nothing is waiting on you.
+        }
+      </p>
+    </div>
+  </div>
+
+  @if (!total()) {
+    <div class="empty-state surface-card">
+      <mat-icon>task_alt</mat-icon>
+      <h3>All clear</h3>
+      @if (allAutomatic()) {
+        <p>
+          Every gate is set to automatic, so nothing needs your approval. Switch one off in
+          Settings if you want to review new staff, doctors or hospitals before they go live.
+        </p>
+        <a mat-stroked-button routerLink="/console/settings">
+          <mat-icon>tune</mat-icon>
+          Open settings
+        </a>
+      } @else {
+        <p>Nothing is waiting. New submissions will appear here.</p>
+      }
+    </div>
+  } @else {
+    @if (pendingUsers().length) {
+      <section>
+        <h2>Staff accounts <span class="count">{{ pendingUsers().length }}</span></h2>
+        <div class="list surface-card">
+          @for (user of pendingUsers(); track user.uid) {
+            <div class="item">
+              <div class="avatar"><mat-icon>person</mat-icon></div>
+              <div class="what">
+                <div class="strong">{{ user.displayName || 'Unnamed' }}</div>
+                <div class="muted">{{ user.email }} · signed up and is waiting</div>
+              </div>
+              <div class="actions">
+                <button mat-button [disabled]="busy() === user.uid" (click)="rejectUser(user)">
+                  Reject
+                </button>
+                <button mat-flat-button [disabled]="busy() === user.uid" (click)="approveUser(user)">
+                  <mat-icon>check</mat-icon>
+                  Approve
+                </button>
+              </div>
+            </div>
+          }
+        </div>
+      </section>
+    }
+
+    @if (pendingDoctors().length) {
+      <section>
+        <h2>Doctors <span class="count">{{ pendingDoctors().length }}</span></h2>
+        <div class="list surface-card">
+          @for (doctor of pendingDoctors(); track doctor.id) {
+            <div class="item">
+              <div class="avatar"><mat-icon>stethoscope</mat-icon></div>
+              <div class="what">
+                <div class="strong">{{ doctor.fullName }}</div>
+                <div class="muted">
+                  {{ doctor.specialty }} · added by {{ submitterName(doctor.ownerUid) }}
+                </div>
+              </div>
+              <div class="actions">
+                <button mat-button [disabled]="busy() === doctor.id" (click)="rejectDoctor(doctor)">
+                  Reject
+                </button>
+                <button
+                  mat-flat-button
+                  [disabled]="busy() === doctor.id"
+                  (click)="approveDoctor(doctor)"
+                >
+                  <mat-icon>check</mat-icon>
+                  Approve
+                </button>
+              </div>
+            </div>
+          }
+        </div>
+      </section>
+    }
+
+    @if (pendingHospitals().length) {
+      <section>
+        <h2>Hospitals <span class="count">{{ pendingHospitals().length }}</span></h2>
+        <div class="list surface-card">
+          @for (hospital of pendingHospitals(); track hospital.id) {
+            <div class="item">
+              <div class="avatar"><mat-icon>local_hospital</mat-icon></div>
+              <div class="what">
+                <div class="strong">{{ hospital.name }}</div>
+                <div class="muted">
+                  {{ hospital.address }}, {{ hospital.city }} · added by
+                  {{ submitterName(hospital.ownerUid) }}
+                </div>
+              </div>
+              <div class="actions">
+                <button
+                  mat-button
+                  [disabled]="busy() === hospital.id"
+                  (click)="rejectHospital(hospital)"
+                >
+                  Reject
+                </button>
+                <button
+                  mat-flat-button
+                  [disabled]="busy() === hospital.id"
+                  (click)="approveHospital(hospital)"
+                >
+                  <mat-icon>check</mat-icon>
+                  Approve
+                </button>
+              </div>
+            </div>
+          }
+        </div>
+      </section>
+    }
+  }
+</div>

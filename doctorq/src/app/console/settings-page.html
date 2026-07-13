@@ -1,0 +1,49 @@
+<div class="page narrow">
+  <div class="section-head">
+    <div>
+      <h1 class="page-title">Settings</h1>
+      <p class="page-subtitle">
+        How much staff can do on their own, and what needs your sign-off first.
+      </p>
+    </div>
+  </div>
+
+  <div class="notice">
+    <mat-icon>info</mat-icon>
+    <span>
+      Turning a switch <b>off</b> puts that action behind your approval — the item is created but
+      stays private and unusable until you approve it. Nothing already approved is affected.
+    </span>
+  </div>
+
+  <div class="settings surface-card">
+    @for (toggle of toggles; track toggle.key) {
+      <div class="row" [class.disabled]="isDisabled(toggle)">
+        <div class="text">
+          <div class="row-title">
+            {{ toggle.title }}
+            @if (settings()[toggle.key]) {
+              <span class="state auto">{{ toggle.labels[0] }}</span>
+            } @else {
+              <span class="state manual">{{ toggle.labels[1] }}</span>
+            }
+          </div>
+          <p>{{ settings()[toggle.key] ? toggle.on : toggle.off }}</p>
+          @if (isDisabled(toggle)) {
+            <p class="dependency">
+              <mat-icon>subdirectory_arrow_right</mat-icon>
+              Only applies while “Staff may add hospitals” is on.
+            </p>
+          }
+        </div>
+
+        <mat-slide-toggle
+          [checked]="settings()[toggle.key]"
+          [disabled]="isDisabled(toggle) || saving() === toggle.key"
+          (change)="set(toggle, $event.checked)"
+          [attr.aria-label]="toggle.title"
+        />
+      </div>
+    }
+  </div>
+</div>

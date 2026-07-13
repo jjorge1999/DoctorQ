@@ -1,0 +1,158 @@
+<div class="dlg">
+  <header class="dlg-head">
+    <span class="dlg-icon">
+      <mat-icon>{{ editing ? 'tune' : 'confirmation_number' }}</mat-icon>
+    </span>
+    <div>
+      <h2>{{ editing ? 'Queue settings' : 'Open a queue' }}</h2>
+      <p>
+        @if (editing) {
+          Change how today's queue runs. Numbers already given out are not affected.
+        } @else {
+          Start today's queue for a doctor. It appears on the public board straight away.
+        }
+      </p>
+    </div>
+  </header>
+
+  <div class="dlg-body" mat-dialog-content>
+    <form [formGroup]="form">
+      @if (!editing) {
+        <section class="dlg-section">
+          <h3 class="legend"><mat-icon>person</mat-icon> Who and where</h3>
+
+          <div class="dlg-grid">
+            <mat-form-field appearance="outline" subscriptSizing="dynamic">
+              <mat-label>Doctor</mat-label>
+              <mat-icon matPrefix>stethoscope</mat-icon>
+              <mat-select formControlName="doctorId" panelWidth="">
+                @for (doctor of doctors(); track doctor.id) {
+                  <mat-option [value]="doctor.id">
+                    {{ doctor.fullName }} — {{ doctor.specialty }}
+                  </mat-option>
+                }
+              </mat-select>
+              <mat-hint>
+                @if (!doctors().length) {
+                  Add a doctor first — a queue belongs to one.
+                } @else {
+                  Whose clinic is this?
+                }
+              </mat-hint>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" subscriptSizing="dynamic">
+              <mat-label>Hospital</mat-label>
+              <mat-icon matPrefix>local_hospital</mat-icon>
+              <mat-select formControlName="hospitalId" panelWidth="">
+                @for (hospital of eligibleHospitals(); track hospital.id) {
+                  <mat-option [value]="hospital.id">
+                    {{ hospital.name }} — {{ hospital.city }}
+                  </mat-option>
+                }
+              </mat-select>
+              <mat-hint>
+                @if (!selectedDoctorId()) {
+                  Pick the doctor first.
+                } @else if (!eligibleHospitals().length) {
+                  This doctor is not attached to any hospital yet.
+                } @else {
+                  Where they are holding clinic today.
+                }
+              </mat-hint>
+            </mat-form-field>
+          </div>
+        </section>
+      }
+
+      <section class="dlg-section">
+        <h3 class="legend"><mat-icon>schedule</mat-icon> Today's clinic</h3>
+
+        <div class="dlg-grid two-col">
+          <mat-form-field appearance="outline" subscriptSizing="dynamic">
+            <mat-label>Room</mat-label>
+            <mat-icon matPrefix>meeting_room</mat-icon>
+            <input matInput formControlName="room" placeholder="e.g. 204-B" />
+            <mat-hint>Shown to patients so they know where to sit.</mat-hint>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" subscriptSizing="dynamic">
+            <mat-label>Minutes per patient</mat-label>
+            <mat-icon matPrefix>timer</mat-icon>
+            <input matInput type="number" min="1" max="120" formControlName="avgMinutesPerPatient" />
+            <mat-hint>Used to estimate the wait.</mat-hint>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" subscriptSizing="dynamic">
+            <mat-label>Clinic starts</mat-label>
+            <input matInput type="time" formControlName="startsAt" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" subscriptSizing="dynamic">
+            <mat-label>Clinic ends</mat-label>
+            <input matInput type="time" formControlName="endsAt" />
+          </mat-form-field>
+        </div>
+      </section>
+
+      <section class="dlg-section">
+        <h3 class="legend"><mat-icon>filter_list</mat-icon> How many patients</h3>
+
+        <div class="limit-box">
+          <mat-slide-toggle formControlName="capped">
+            Limit how many numbers are given out today
+          </mat-slide-toggle>
+          <p class="dlg-hint">
+            When the limit is reached the queue turns to <b>cut-off</b> on its own, so patients who
+            have not got a number know to stay home.
+          </p>
+
+          @if (form.controls.capped.value) {
+            <mat-form-field appearance="outline" subscriptSizing="dynamic" class="cap-field">
+              <mat-label>Maximum patients today</mat-label>
+              <mat-icon matPrefix>groups</mat-icon>
+              <input matInput type="number" min="1" formControlName="maxSlots" />
+            </mat-form-field>
+          }
+        </div>
+      </section>
+
+      <section class="dlg-section">
+        <h3 class="legend"><mat-icon>campaign</mat-icon> Notice for patients</h3>
+
+        <mat-form-field appearance="outline" subscriptSizing="dynamic" class="full">
+          <mat-label>Public notice (optional)</mat-label>
+          <textarea
+            matInput
+            rows="2"
+            formControlName="note"
+            placeholder="e.g. Doctor running 30 minutes late"
+          ></textarea>
+        </mat-form-field>
+
+        <div class="dlg-callout">
+          <mat-icon>shield</mat-icon>
+          <span>
+            This shows on the public board. Never put a patient's name or any medical detail here.
+          </span>
+        </div>
+      </section>
+    </form>
+
+    @if (error()) {
+      <div class="dlg-error">
+        <mat-icon>error</mat-icon>
+        <span>{{ error() }}</span>
+      </div>
+    }
+  </div>
+
+  <footer class="dlg-foot" mat-dialog-actions>
+    <span class="spacer"></span>
+    <button mat-stroked-button mat-dialog-close>Cancel</button>
+    <button mat-flat-button [disabled]="form.invalid || busy()" (click)="save()">
+      <mat-icon>{{ editing ? 'save' : 'play_arrow' }}</mat-icon>
+      {{ editing ? 'Save changes' : 'Open queue' }}
+    </button>
+  </footer>
+</div>

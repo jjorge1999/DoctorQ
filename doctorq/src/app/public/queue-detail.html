@@ -1,0 +1,175 @@
+<app-public-header />
+
+<main class="page">
+  <a class="back" routerLink="/">
+    <mat-icon>arrow_back</mat-icon>
+    All clinics
+  </a>
+
+  @if (loading()) {
+    <div class="empty-state"><mat-spinner diameter="36" /></div>
+  } @else if (entry(); as e) {
+    <div class="layout">
+      <section class="main-col">
+        <div class="display surface-card">
+          <div class="display-top">
+            <app-status-chip [status]="e.session.status" [full]="e.slotsLeft === 0" />
+            <span class="stamp">Updated {{ e.session.updatedAt | date: 'h:mm a' }}</span>
+          </div>
+
+          <div class="now-label">Now serving</div>
+          <div class="now-number numeral">
+            @if (e.session.nowServing > 0) {
+              {{ e.session.nowServing }}
+            } @else {
+              <span class="not-started">—</span>
+            }
+          </div>
+          @if (e.session.nowServing === 0) {
+            <p class="now-hint">The doctor has not called the first number yet.</p>
+          } @else if (e.session.priorityCall) {
+            <p class="priority-note">
+              <mat-icon>bolt</mat-icon>
+              Called ahead of turn for an urgent case. If you hold a lower number you have not been
+              skipped — you are still in the queue.
+            </p>
+          }
+
+          <div class="display-stats">
+            <div>
+              <span class="numeral">{{ e.session.lastIssued }}</span>
+              <small>Last number issued</small>
+            </div>
+            <div>
+              <span class="numeral">{{ e.waiting }}</span>
+              <small>Patients waiting</small>
+            </div>
+            <div>
+              <span class="numeral">{{ e.slotsLeft === null ? '∞' : e.slotsLeft }}</span>
+              <small>Slots left today</small>
+            </div>
+          </div>
+        </div>
+
+        @if (advice(); as a) {
+          <div class="advice" [class]="a.tone">
+            <mat-icon>
+              {{
+                a.tone === 'open'
+                  ? 'directions_walk'
+                  : a.tone === 'paused'
+                    ? 'pause_circle'
+                    : 'block'
+              }}
+            </mat-icon>
+            <div>
+              <h3>{{ a.title }}</h3>
+              <p>{{ a.body }}</p>
+            </div>
+          </div>
+        }
+
+        @if (e.session.note) {
+          <div class="advice paused">
+            <mat-icon>campaign</mat-icon>
+            <div>
+              <h3>Notice from the clinic</h3>
+              <p>{{ e.session.note }}</p>
+            </div>
+          </div>
+        }
+
+        <p class="privacy">
+          <mat-icon>shield</mat-icon>
+          This board shows queue numbers only. No patient names or health information are published.
+        </p>
+      </section>
+
+      <aside class="side-col">
+        <div class="panel surface-card">
+          <h2>Your doctor</h2>
+          <div class="doctor">
+            <div class="avatar">
+              @if (e.doctor?.photoUrl) {
+                <img [src]="e.doctor!.photoUrl" [alt]="e.doctor!.fullName" />
+              } @else {
+                <span>{{ initials(e.doctor?.fullName) }}</span>
+              }
+            </div>
+            <div>
+              <h3>{{ e.doctor?.fullName ?? 'Unassigned' }}</h3>
+              <p class="specialty">{{ e.doctor?.specialty }}</p>
+              @if (e.doctor?.licenseNo) {
+                <p class="muted">Licence {{ e.doctor!.licenseNo }}</p>
+              }
+            </div>
+          </div>
+          @if (e.doctor?.bio) {
+            <p class="bio">{{ e.doctor!.bio }}</p>
+          }
+
+          <mat-divider />
+
+          <dl>
+            <div>
+              <dt>Clinic hours</dt>
+              <dd>
+                @if (e.session.startsAt && e.session.endsAt) {
+                  {{ e.session.startsAt }} – {{ e.session.endsAt }}
+                } @else {
+                  Not published
+                }
+              </dd>
+            </div>
+            <div>
+              <dt>Room</dt>
+              <dd>{{ e.session.room || 'Ask at reception' }}</dd>
+            </div>
+            <div>
+              <dt>Average per patient</dt>
+              <dd>{{ e.session.avgMinutesPerPatient }} min</dd>
+            </div>
+            <div>
+              <dt>Daily capacity</dt>
+              <dd>{{ e.session.maxSlots === null ? 'No fixed limit' : e.session.maxSlots + ' patients' }}</dd>
+            </div>
+          </dl>
+        </div>
+
+        <div class="panel surface-card">
+          <h2>Hospital</h2>
+          @if (e.hospital; as h) {
+            <h3>{{ h.name }}</h3>
+            <p class="muted">{{ h.address }}, {{ h.city }}</p>
+            <div class="actions">
+              @if (h.phone) {
+                <a mat-stroked-button [href]="'tel:' + h.phone">
+                  <mat-icon>call</mat-icon>
+                  {{ h.phone }}
+                </a>
+              }
+              <a
+                mat-stroked-button
+                target="_blank"
+                rel="noopener"
+                [href]="mapsUrl(h.name + ' ' + h.address + ' ' + h.city)"
+              >
+                <mat-icon>map</mat-icon>
+                Directions
+              </a>
+            </div>
+          } @else {
+            <p class="muted">Hospital details unavailable.</p>
+          }
+        </div>
+      </aside>
+    </div>
+  } @else {
+    <div class="empty-state surface-card">
+      <mat-icon>search_off</mat-icon>
+      <h3>Queue not found</h3>
+      <p>This queue may have been removed, or the clinic day has rolled over.</p>
+      <a mat-flat-button routerLink="/">Back to today's clinics</a>
+    </div>
+  }
+</main>

@@ -1,0 +1,111 @@
+<div class="dlg">
+  <header class="dlg-head">
+    <span class="dlg-icon"><mat-icon>stethoscope</mat-icon></span>
+    <div>
+      <h2>{{ doctor ? 'Edit doctor' : 'Add doctor' }}</h2>
+      <p>
+        @if (doctor) {
+          Changes here reach the public board immediately.
+        } @else {
+          Their profile appears next to their queue number on the public board.
+        }
+      </p>
+    </div>
+  </header>
+
+  <div class="dlg-body" mat-dialog-content>
+    <form [formGroup]="form">
+      <section class="dlg-section">
+        <h3 class="legend"><mat-icon>badge</mat-icon> Who they are</h3>
+
+        <div class="dlg-grid two-col">
+          <mat-form-field appearance="outline" subscriptSizing="dynamic" class="span-2">
+            <mat-label>Full name</mat-label>
+            <mat-icon matPrefix>person</mat-icon>
+            <input matInput formControlName="fullName" placeholder="Dr. Maria Santos" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" subscriptSizing="dynamic">
+            <mat-label>Specialty</mat-label>
+            <mat-icon matPrefix>local_hospital</mat-icon>
+            <mat-select formControlName="specialty" panelWidth="">
+              @for (specialty of specialties; track specialty) {
+                <mat-option [value]="specialty">{{ specialty }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" subscriptSizing="dynamic">
+            <mat-label>Licence number</mat-label>
+            <mat-icon matPrefix>badge</mat-icon>
+            <input matInput formControlName="licenseNo" placeholder="Optional" />
+          </mat-form-field>
+        </div>
+      </section>
+
+      <section class="dlg-section">
+        <h3 class="legend"><mat-icon>local_hospital</mat-icon> Where they practise</h3>
+
+        <div class="dlg-grid">
+          <mat-form-field appearance="outline" subscriptSizing="dynamic">
+            <mat-label>Hospitals</mat-label>
+            <mat-select formControlName="hospitalIds" multiple panelWidth="">
+              @for (hospital of hospitals(); track hospital.id) {
+                <mat-option [value]="hospital.id">
+                  {{ hospital.name }} — {{ hospital.city }}
+                </mat-option>
+              }
+            </mat-select>
+            <mat-hint>
+              @if (!canSetHospitals) {
+                Assigned to you by an administrator — they own where this doctor practises.
+              } @else if (!hospitals().length) {
+                No hospitals exist yet — an administrator maintains the directory.
+              } @else {
+                A queue can only be opened at a hospital picked here.
+              }
+            </mat-hint>
+          </mat-form-field>
+        </div>
+      </section>
+
+      <section class="dlg-section">
+        <h3 class="legend"><mat-icon>image</mat-icon> Public profile</h3>
+
+        <div class="dlg-grid">
+          <mat-form-field appearance="outline" subscriptSizing="dynamic">
+            <mat-label>Photo URL</mat-label>
+            <mat-icon matPrefix>image</mat-icon>
+            <input matInput formControlName="photoUrl" placeholder="https:// (optional)" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" subscriptSizing="dynamic">
+            <mat-label>Short bio</mat-label>
+            <textarea
+              matInput
+              rows="3"
+              formControlName="bio"
+              placeholder="Shown to patients on the public queue page. Optional."
+            ></textarea>
+          </mat-form-field>
+        </div>
+      </section>
+    </form>
+
+    @if (error()) {
+      <div class="dlg-error">
+        <mat-icon>error</mat-icon>
+        <span>{{ error() }}</span>
+      </div>
+    }
+  </div>
+
+  <footer class="dlg-foot" mat-dialog-actions>
+    <span class="spacer"></span>
+    <button mat-stroked-button mat-dialog-close>Cancel</button>
+    <button mat-flat-button [disabled]="form.invalid || busy()" (click)="save()">
+      <mat-icon>{{ doctor ? 'save' : 'add' }}</mat-icon>
+      {{ doctor ? 'Save changes' : 'Add doctor' }}
+    </button>
+  </footer>
+</div>
