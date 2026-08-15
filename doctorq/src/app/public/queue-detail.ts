@@ -6,7 +6,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { RouterLink } from '@angular/router';
-import { switchMap } from 'rxjs';
+import { map, switchMap } from 'rxjs';
 import { toObservable } from '@angular/core/rxjs-interop';
 import { QueueService } from '../core/queue.service';
 import { PublicHeader } from '../shared/public-header';
@@ -34,12 +34,21 @@ export class QueueDetail {
   /** Bound from the :id route param via withComponentInputBinding-free `input()` on the route. */
   readonly id = input.required<string>();
 
+  /**
+   * Wrapped in `{ entry }` because `entry$` legitimately emits `undefined` for a queue that
+   * doesn't exist — without the wrapper, `toSignal`'s own "nothing has arrived yet" sentinel
+   * (also `undefined`) would be indistinguishable from that answer, and `loading` below would
+   * never turn false for a bad id.
+   */
   private readonly entryQuery = toSignal(
-    toObservable(this.id).pipe(switchMap((id) => this.queue.entry$(id))),
+    toObservable(this.id).pipe(
+      switchMap((id) => this.queue.entry$(id)),
+      map((entry) => ({ entry })),
+    ),
   );
 
   readonly loading = computed(() => this.entryQuery() === undefined);
-  readonly entry = computed(() => this.entryQuery());
+  readonly entry = computed(() => this.entryQuery()?.entry);
   readonly today = new Date();
 
   /**

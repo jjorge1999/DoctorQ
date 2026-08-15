@@ -126,7 +126,31 @@ const hospitals = [
     city: 'San Juan',
     phone: '+63 2 8727 0001',
   },
+  {
+    id: 'h-manila',
+    name: 'Manila Doctors Hospital',
+    address: '667 United Nations Ave, Ermita',
+    city: 'Manila',
+    phone: '+63 2 8558 0888',
+  },
+  {
+    id: 'h-medicity',
+    name: 'The Medical City',
+    address: 'Ortigas Ave, Pasig',
+    city: 'Pasig',
+    phone: '+63 2 8988 1000',
+  },
+  {
+    id: 'h-asian',
+    name: 'Asian Hospital and Medical Center',
+    address: '2205 Civic Dr, Filinvest City',
+    city: 'Muntinlupa',
+    phone: '+63 2 8771 9000',
+  },
 ];
+
+/** Deterministic per-doctor portrait so re-running the seed doesn't reshuffle faces. */
+const photoUrl = (id) => `https://i.pravatar.cc/300?u=${id}`;
 
 const doctors = [
   {
@@ -136,6 +160,7 @@ const doctors = [
     licenseNo: 'PRC-0114523',
     hospitalIds: ['h-stluke', 'h-makatimed'],
     bio: 'Interventional cardiologist. Consultations for hypertension, arrhythmia and post-operative follow-up.',
+    photoUrl: photoUrl('d-santos'),
   },
   {
     id: 'd-reyes',
@@ -144,6 +169,7 @@ const doctors = [
     licenseNo: 'PRC-0098311',
     hospitalIds: ['h-makatimed'],
     bio: 'General paediatrics, newborn care and childhood immunisation.',
+    photoUrl: photoUrl('d-reyes'),
   },
   {
     id: 'd-lim',
@@ -152,6 +178,7 @@ const doctors = [
     licenseNo: 'PRC-0132994',
     hospitalIds: ['h-cardinal', 'h-stluke'],
     bio: 'Medical and surgical dermatology, with a focus on chronic skin conditions.',
+    photoUrl: photoUrl('d-lim'),
   },
   {
     id: 'd-tan',
@@ -160,8 +187,40 @@ const doctors = [
     licenseNo: 'PRC-0076140',
     hospitalIds: ['h-cardinal'],
     bio: 'Sports injuries, joint replacement and fracture care.',
+    photoUrl: photoUrl('d-tan'),
   },
 ];
+
+// Extra doctors, one per hospital in rotation, purely to give the board 20 queues of sample
+// data to look at. Kept separate from the hand-authored four above for readability.
+const extraDoctorSpecs = [
+  ['d-cruz', 'Dr. Ramon Cruz', 'Neurology', '0201144'],
+  ['d-garcia', 'Dr. Liza Garcia', 'Otolaryngology (ENT)', '0201145'],
+  ['d-delacruz', 'Dr. Noel Dela Cruz', 'Endocrinology', '0201146'],
+  ['d-mendoza', 'Dr. Grace Mendoza', 'Psychiatry', '0201147'],
+  ['d-bautista', 'Dr. Ferdinand Bautista', 'Urology', '0201148'],
+  ['d-aquino', 'Dr. Corazon Aquino-Reyes', 'Gastroenterology', '0201149'],
+  ['d-torres', 'Dr. Miguel Torres', 'Pulmonology', '0201150'],
+  ['d-ramos', 'Dr. Estrella Ramos', 'Nephrology', '0201151'],
+  ['d-flores', 'Dr. Benjamin Flores', 'Medical Oncology', '0201152'],
+  ['d-castillo', 'Dr. Angelica Castillo', 'Rheumatology', '0201153'],
+  ['d-navarro', 'Dr. Ricardo Navarro', 'Ophthalmology', '0201154'],
+  ['d-villanueva', 'Dr. Josefina Villanueva', 'Family Medicine', '0201155'],
+  ['d-gonzales', 'Dr. Arturo Gonzales', 'General Surgery', '0201156'],
+  ['d-pascual', 'Dr. Beatriz Pascual', 'Obstetrics & Gynaecology', '0201157'],
+  ['d-santiago', 'Dr. Emmanuel Santiago', 'Internal Medicine', '0201158'],
+  ['d-morales', 'Dr. Rosario Morales', 'Anaesthesiology', '0201159'],
+].map(([id, fullName, specialty, licenseNo], i) => ({
+  id,
+  fullName,
+  specialty,
+  licenseNo: `PRC-${licenseNo}`,
+  hospitalIds: [hospitals[i % hospitals.length].id],
+  bio: `${specialty} consultations and follow-up care.`,
+  photoUrl: photoUrl(id),
+}));
+
+doctors.push(...extraDoctorSpecs);
 
 // Deliberately varied so every state on the board is visible after seeding.
 const queues = [
@@ -219,6 +278,29 @@ const queues = [
   },
 ];
 
+// One queue per extra doctor, cycling through open/paused/cutoff so the board shows every state.
+const statusCycle = ['open', 'open', 'paused', 'cutoff'];
+const roomCycle = ['1st Flr, OPD', '2nd Flr, Suite B', '3rd Flr, Clinic 7', 'Annex, Room 4'];
+queues.push(
+  ...extraDoctorSpecs.map((d, i) => {
+    const status = statusCycle[i % statusCycle.length];
+    const lastIssued = 10 + i;
+    return {
+      doctorId: d.id,
+      hospitalId: d.hospitalIds[0],
+      room: roomCycle[i % roomCycle.length],
+      status,
+      nowServing: status === 'cutoff' ? lastIssued : Math.max(1, lastIssued - 5),
+      lastIssued,
+      maxSlots: lastIssued + 5,
+      avgMinutesPerPatient: 10 + (i % 3) * 5,
+      startsAt: '08:00',
+      endsAt: '17:00',
+      note: status === 'paused' ? 'Doctor on a short break.' : '',
+    };
+  }),
+);
+
 // The access policy. These are the defaults the app assumes when the document is absent; writing
 // them explicitly just makes them visible on the Settings page from the first run.
 await setDoc(doc(db, 'settings', 'access'), {
@@ -253,31 +335,30 @@ console.log(
     `(${live ? 'live project ' + config.projectId : 'emulator'}).`,
 );
 
-if (!live) {
-  // A scoped staff member, created the same way a real one would be: they sign themselves up
-  // (landing on role 'staff' with nothing assigned), then an admin attaches a doctor.
-  const staff = await signInOrCreate(STAFF);
+// A scoped staff member, created the same way a real one would be: they sign themselves up
+// (landing on role 'staff' with nothing assigned), then an admin attaches a doctor. This runs
+// against the emulator and a live project alike — both need a demo staff login to test scoping.
+const staff = await signInOrCreate(STAFF);
 
-  // Only on first run. Re-writing an existing profile would mean the staff member resetting
-  // their own doctorIds, which the rules rightly refuse — an admin owns that field.
-  if (!(await getDoc(doc(db, 'users', staff.user.uid))).exists()) {
-    await setDoc(doc(db, 'users', staff.user.uid), {
-      email: STAFF.email,
-      displayName: STAFF.name,
-      role: 'staff',
-      doctorIds: [],
-      createdAt: Date.now(),
-    });
-  }
-
-  await signInWithEmailAndPassword(auth, ADMIN.email, ADMIN.password);
-  await updateDoc(doc(db, 'users', staff.user.uid), { doctorIds: STAFF.doctorIds });
-
-  const assigned = doctors.find((d) => d.id === STAFF.doctorIds[0])?.fullName;
-  console.log('');
-  console.log(`Admin  — ${ADMIN.email} / ${ADMIN.password}  (all doctors and hospitals)`);
-  console.log(`Staff  — ${STAFF.email} / ${STAFF.password}  (${assigned}, assigned by the admin)`);
-  console.log('         Staff can also add their own doctors — no admin needed.');
+// Only on first run. Re-writing an existing profile would mean the staff member resetting
+// their own doctorIds, which the rules rightly refuse — an admin owns that field.
+if (!(await getDoc(doc(db, 'users', staff.user.uid))).exists()) {
+  await setDoc(doc(db, 'users', staff.user.uid), {
+    email: STAFF.email,
+    displayName: STAFF.name,
+    role: 'staff',
+    doctorIds: [],
+    createdAt: Date.now(),
+  });
 }
+
+await signInWithEmailAndPassword(auth, ADMIN.email, ADMIN.password);
+await updateDoc(doc(db, 'users', staff.user.uid), { doctorIds: STAFF.doctorIds });
+
+const assigned = doctors.find((d) => d.id === STAFF.doctorIds[0])?.fullName;
+console.log('');
+console.log(`Admin  — ${ADMIN.email} / ${ADMIN.password}  (all doctors and hospitals)`);
+console.log(`Staff  — ${STAFF.email} / ${STAFF.password}  (${assigned}, assigned by the admin)`);
+console.log('         Staff can also add their own doctors — no admin needed.');
 
 process.exit(0);

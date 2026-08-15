@@ -1,0 +1,587 @@
+- generic [ref=e3]:
+  - banner [ref=e5]:
+    - link "DoctorQ" [ref=e6] [cursor=pointer]:
+      - /url: /
+      - img [ref=e8]: graphic_eq
+    - link "Staff sign in" [ref=e10] [cursor=pointer]:
+      - /url: /console
+      - img [ref=e11]: lock
+  - generic [ref=e16]:
+    - generic [ref=e17]: Live · updates automatically
+    - heading "Know the queue before you leave home." [level=1] [ref=e19]
+    - paragraph [ref=e20]: Current queue numbers for every clinic running today. Check whether your doctor is still accepting patients — and skip the trip if the cut-off has already passed.
+    - generic [ref=e21]: Saturday, 15 August 2026
+  - main [ref=e22]:
+    - generic [ref=e23]:
+      - generic [ref=e24]:
+        - heading "Today's clinics" [level=2] [ref=e25]
+        - paragraph [ref=e26]: 20 clinics listed · 10 still accepting patients
+      - generic [ref=e27]:
+        - generic [ref=e30]:
+          - generic: Search doctor or specialty
+          - img [ref=e33]: search
+          - textbox "Search doctor or specialty" [ref=e35]:
+            - /placeholder: e.g. cardiology
+        - generic [ref=e38] [cursor=pointer]:
+          - generic: Hospital
+          - combobox "Hospital" [ref=e41]:
+            - generic [ref=e42]: All hospitals
+    - generic [ref=e49]:
+      - link "AR Dr. Andres Reyes Paediatrics Makati Medical Center · Room 3rd Flr, Peds Wing Now serving 4 2 waiting 6 last number ∞ slots left Doctor running about 20 minutes behind. Accepting patients ~30 min wait" [ref=e50] [cursor=pointer]:
+        - /url: /q/d-reyes__h-makatimed__2026-08-15
+        - generic [ref=e51]:
+          - generic [ref=e52]: AR
+          - generic [ref=e54]:
+            - heading "Dr. Andres Reyes" [level=3] [ref=e55]
+            - paragraph [ref=e56]: Paediatrics
+        - generic [ref=e57]:
+          - img [ref=e58]: location_on
+          - generic [ref=e59]: Makati Medical Center · Room 3rd Flr, Peds Wing
+        - generic [ref=e60]:
+          - generic [ref=e61]: Now serving
+          - generic [ref=e62]: "4"
+        - generic [ref=e63]:
+          - generic [ref=e64]:
+            - generic [ref=e65]: "2"
+            - generic [ref=e66]: waiting
+          - generic [ref=e67]:
+            - generic [ref=e68]: "6"
+            - generic [ref=e69]: last number
+          - generic [ref=e70]:
+            - generic [ref=e71]: ∞
+            - generic [ref=e72]: slots left
+        - generic [ref=e73]:
+          - img [ref=e74]: campaign
+          - generic [ref=e75]: Doctor running about 20 minutes behind.
+        - generic [ref=e76]:
+          - generic [ref=e78]:
+            - img [ref=e79]: check_circle
+            - generic [ref=e80]: Accepting patients
+          - generic [ref=e81]: ~30 min wait
+      - link "AC Dr. Angelica Castillo Rheumatology Manila Doctors Hospital · Room 2nd Flr, Suite B Now serving 14 5 waiting 19 last number 5 slots left Accepting patients ~50 min wait" [ref=e82] [cursor=pointer]:
+        - /url: /q/d-castillo__h-manila__2026-08-15
+        - generic [ref=e83]:
+          - generic [ref=e84]: AC
+          - generic [ref=e86]:
+            - heading "Dr. Angelica Castillo" [level=3] [ref=e87]
+            - paragraph [ref=e88]: Rheumatology
+        - generic [ref=e89]:
+          - img [ref=e90]: location_on
+          - generic [ref=e91]: Manila Doctors Hospital · Room 2nd Flr, Suite B
+        - generic [ref=e92]:
+          - generic [ref=e93]: Now serving
+          - generic [ref=e94]: "14"
+        - generic [ref=e95]:
+          - generic [ref=e96]:
+            - generic [ref=e97]: "5"
+            - generic [ref=e98]: waiting
+          - generic [ref=e99]:
+            - generic [ref=e100]: "19"
+            - generic [ref=e101]: last number
+          - generic [ref=e102]:
+            - generic [ref=e103]: "5"
+            - generic [ref=e104]: slots left
+        - generic [ref=e105]:
+          - generic [ref=e107]:
+            - img [ref=e108]: check_circle
+            - generic [ref=e109]: Accepting patients
+          - generic [ref=e110]: ~50 min wait
+      - link "AG Dr. Arturo Gonzales General Surgery St. Luke's Medical Center · Room 1st Flr, OPD Now serving 17 5 waiting 22 last number 5 slots left Accepting patients ~50 min wait" [ref=e111] [cursor=pointer]:
+        - /url: /q/d-gonzales__h-stluke__2026-08-15
+        - generic [ref=e112]:
+          - generic [ref=e113]: AG
+          - generic [ref=e115]:
+            - heading "Dr. Arturo Gonzales" [level=3] [ref=e116]
+            - paragraph [ref=e117]: General Surgery
+        - generic [ref=e118]:
+          - img [ref=e119]: location_on
+          - generic [ref=e120]: St. Luke's Medical Center · Room 1st Flr, OPD
+        - generic [ref=e121]:
+          - generic [ref=e122]: Now serving
+          - generic [ref=e123]: "17"
+        - generic [ref=e124]:
+          - generic [ref=e125]:
+            - generic [ref=e126]: "5"
+            - generic [ref=e127]: waiting
+          - generic [ref=e128]:
+            - generic [ref=e129]: "22"
+            - generic [ref=e130]: last number
+          - generic [ref=e131]:
+            - generic [ref=e132]: "5"
+            - generic [ref=e133]: slots left
+        - generic [ref=e134]:
+          - generic [ref=e136]:
+            - img [ref=e137]: check_circle
+            - generic [ref=e138]: Accepting patients
+          - generic [ref=e139]: ~50 min wait
+      - link "BP Dr. Beatriz Pascual Obstetrics & Gynaecology Makati Medical Center · Room 2nd Flr, Suite B Now serving 18 5 waiting 23 last number 5 slots left Accepting patients ~1h 15m wait" [ref=e140] [cursor=pointer]:
+        - /url: /q/d-pascual__h-makatimed__2026-08-15
+        - generic [ref=e141]:
+          - generic [ref=e142]: BP
+          - generic [ref=e144]:
+            - heading "Dr. Beatriz Pascual" [level=3] [ref=e145]
+            - paragraph [ref=e146]: Obstetrics & Gynaecology
+        - generic [ref=e147]:
+          - img [ref=e148]: location_on
+          - generic [ref=e149]: Makati Medical Center · Room 2nd Flr, Suite B
+        - generic [ref=e150]:
+          - generic [ref=e151]: Now serving
+          - generic [ref=e152]: "18"
+        - generic [ref=e153]:
+          - generic [ref=e154]:
+            - generic [ref=e155]: "5"
+            - generic [ref=e156]: waiting
+          - generic [ref=e157]:
+            - generic [ref=e158]: "23"
+            - generic [ref=e159]: last number
+          - generic [ref=e160]:
+            - generic [ref=e161]: "5"
+            - generic [ref=e162]: slots left
+        - generic [ref=e163]:
+          - generic [ref=e165]:
+            - img [ref=e166]: check_circle
+            - generic [ref=e167]: Accepting patients
+          - generic [ref=e168]: ~1h 15m wait
+      - link "BF Dr. Benjamin Flores Medical Oncology Cardinal Santos Medical Center · Room 1st Flr, OPD Now serving 13 5 waiting 18 last number 5 slots left Accepting patients ~1h 40m wait" [ref=e169] [cursor=pointer]:
+        - /url: /q/d-flores__h-cardinal__2026-08-15
+        - generic [ref=e170]:
+          - generic [ref=e171]: BF
+          - generic [ref=e173]:
+            - heading "Dr. Benjamin Flores" [level=3] [ref=e174]
+            - paragraph [ref=e175]: Medical Oncology
+        - generic [ref=e176]:
+          - img [ref=e177]: location_on
+          - generic [ref=e178]: Cardinal Santos Medical Center · Room 1st Flr, OPD
+        - generic [ref=e179]:
+          - generic [ref=e180]: Now serving
+          - generic [ref=e181]: "13"
+        - generic [ref=e182]:
+          - generic [ref=e183]:
+            - generic [ref=e184]: "5"
+            - generic [ref=e185]: waiting
+          - generic [ref=e186]:
+            - generic [ref=e187]: "18"
+            - generic [ref=e188]: last number
+          - generic [ref=e189]:
+            - generic [ref=e190]: "5"
+            - generic [ref=e191]: slots left
+        - generic [ref=e192]:
+          - generic [ref=e194]:
+            - img [ref=e195]: check_circle
+            - generic [ref=e196]: Accepting patients
+          - generic [ref=e197]: ~1h 40m wait
+      - link "CL Dr. Carmen Lim Dermatology Cardinal Santos Medical Center · Room 512 Now serving 22 3 waiting 25 last number 0 slots left Cut-off — no new patients" [ref=e198] [cursor=pointer]:
+        - /url: /q/d-lim__h-cardinal__2026-08-15
+        - generic [ref=e199]:
+          - generic [ref=e200]: CL
+          - generic [ref=e202]:
+            - heading "Dr. Carmen Lim" [level=3] [ref=e203]
+            - paragraph [ref=e204]: Dermatology
+        - generic [ref=e205]:
+          - img [ref=e206]: location_on
+          - generic [ref=e207]: Cardinal Santos Medical Center · Room 512
+        - generic [ref=e208]:
+          - generic [ref=e209]: Now serving
+          - generic [ref=e210]: "22"
+        - generic [ref=e211]:
+          - generic [ref=e212]:
+            - generic [ref=e213]: "3"
+            - generic [ref=e214]: waiting
+          - generic [ref=e215]:
+            - generic [ref=e216]: "25"
+            - generic [ref=e217]: last number
+          - generic [ref=e218]:
+            - generic [ref=e219]: "0"
+            - generic [ref=e220]: slots left
+        - generic [ref=e223]:
+          - img [ref=e224]: do_not_disturb_on
+          - generic [ref=e225]: Cut-off — no new patients
+      - link "CA Dr. Corazon Aquino-Reyes Gastroenterology Asian Hospital and Medical Center · Room 2nd Flr, Suite B Now serving 10 5 waiting 15 last number 5 slots left Accepting patients ~1h 40m wait" [ref=e226] [cursor=pointer]:
+        - /url: /q/d-aquino__h-asian__2026-08-15
+        - generic [ref=e227]:
+          - generic [ref=e228]: CA
+          - generic [ref=e230]:
+            - heading "Dr. Corazon Aquino-Reyes" [level=3] [ref=e231]
+            - paragraph [ref=e232]: Gastroenterology
+        - generic [ref=e233]:
+          - img [ref=e234]: location_on
+          - generic [ref=e235]: Asian Hospital and Medical Center · Room 2nd Flr, Suite B
+        - generic [ref=e236]:
+          - generic [ref=e237]: Now serving
+          - generic [ref=e238]: "10"
+        - generic [ref=e239]:
+          - generic [ref=e240]:
+            - generic [ref=e241]: "5"
+            - generic [ref=e242]: waiting
+          - generic [ref=e243]:
+            - generic [ref=e244]: "15"
+            - generic [ref=e245]: last number
+          - generic [ref=e246]:
+            - generic [ref=e247]: "5"
+            - generic [ref=e248]: slots left
+        - generic [ref=e249]:
+          - generic [ref=e251]:
+            - img [ref=e252]: check_circle
+            - generic [ref=e253]: Accepting patients
+          - generic [ref=e254]: ~1h 40m wait
+      - link "ES Dr. Emmanuel Santiago Internal Medicine Cardinal Santos Medical Center · Room 3rd Flr, Clinic 7 Now serving 19 5 waiting 24 last number 5 slots left Doctor on a short break. Paused" [ref=e255] [cursor=pointer]:
+        - /url: /q/d-santiago__h-cardinal__2026-08-15
+        - generic [ref=e256]:
+          - generic [ref=e257]: ES
+          - generic [ref=e259]:
+            - heading "Dr. Emmanuel Santiago" [level=3] [ref=e260]
+            - paragraph [ref=e261]: Internal Medicine
+        - generic [ref=e262]:
+          - img [ref=e263]: location_on
+          - generic [ref=e264]: Cardinal Santos Medical Center · Room 3rd Flr, Clinic 7
+        - generic [ref=e265]:
+          - generic [ref=e266]: Now serving
+          - generic [ref=e267]: "19"
+        - generic [ref=e268]:
+          - generic [ref=e269]:
+            - generic [ref=e270]: "5"
+            - generic [ref=e271]: waiting
+          - generic [ref=e272]:
+            - generic [ref=e273]: "24"
+            - generic [ref=e274]: last number
+          - generic [ref=e275]:
+            - generic [ref=e276]: "5"
+            - generic [ref=e277]: slots left
+        - generic [ref=e278]:
+          - img [ref=e279]: campaign
+          - generic [ref=e280]: Doctor on a short break.
+        - generic [ref=e283]:
+          - img [ref=e284]: pause_circle
+          - generic [ref=e285]: Paused
+      - link "ER Dr. Estrella Ramos Nephrology Makati Medical Center · Room Annex, Room 4 Now serving 17 0 waiting 17 last number 5 slots left Cut-off — no new patients" [ref=e286] [cursor=pointer]:
+        - /url: /q/d-ramos__h-makatimed__2026-08-15
+        - generic [ref=e287]:
+          - generic [ref=e288]: ER
+          - generic [ref=e290]:
+            - heading "Dr. Estrella Ramos" [level=3] [ref=e291]
+            - paragraph [ref=e292]: Nephrology
+        - generic [ref=e293]:
+          - img [ref=e294]: location_on
+          - generic [ref=e295]: Makati Medical Center · Room Annex, Room 4
+        - generic [ref=e296]:
+          - generic [ref=e297]: Now serving
+          - generic [ref=e298]: "17"
+        - generic [ref=e299]:
+          - generic [ref=e300]:
+            - generic [ref=e301]: "0"
+            - generic [ref=e302]: waiting
+          - generic [ref=e303]:
+            - generic [ref=e304]: "17"
+            - generic [ref=e305]: last number
+          - generic [ref=e306]:
+            - generic [ref=e307]: "5"
+            - generic [ref=e308]: slots left
+        - generic [ref=e311]:
+          - img [ref=e312]: do_not_disturb_on
+          - generic [ref=e313]: Cut-off — no new patients
+      - link "FB Dr. Ferdinand Bautista Urology The Medical City · Room 1st Flr, OPD Now serving 9 5 waiting 14 last number 5 slots left Accepting patients ~1h 15m wait" [ref=e314] [cursor=pointer]:
+        - /url: /q/d-bautista__h-medicity__2026-08-15
+        - generic [ref=e315]:
+          - generic [ref=e316]: FB
+          - generic [ref=e318]:
+            - heading "Dr. Ferdinand Bautista" [level=3] [ref=e319]
+            - paragraph [ref=e320]: Urology
+        - generic [ref=e321]:
+          - img [ref=e322]: location_on
+          - generic [ref=e323]: The Medical City · Room 1st Flr, OPD
+        - generic [ref=e324]:
+          - generic [ref=e325]: Now serving
+          - generic [ref=e326]: "9"
+        - generic [ref=e327]:
+          - generic [ref=e328]:
+            - generic [ref=e329]: "5"
+            - generic [ref=e330]: waiting
+          - generic [ref=e331]:
+            - generic [ref=e332]: "14"
+            - generic [ref=e333]: last number
+          - generic [ref=e334]:
+            - generic [ref=e335]: "5"
+            - generic [ref=e336]: slots left
+        - generic [ref=e337]:
+          - generic [ref=e339]:
+            - img [ref=e340]: check_circle
+            - generic [ref=e341]: Accepting patients
+          - generic [ref=e342]: ~1h 15m wait
+      - link "GM Dr. Grace Mendoza Psychiatry Manila Doctors Hospital · Room Annex, Room 4 Now serving 13 0 waiting 13 last number 5 slots left Cut-off — no new patients" [ref=e343] [cursor=pointer]:
+        - /url: /q/d-mendoza__h-manila__2026-08-15
+        - generic [ref=e344]:
+          - generic [ref=e345]: GM
+          - generic [ref=e347]:
+            - heading "Dr. Grace Mendoza" [level=3] [ref=e348]
+            - paragraph [ref=e349]: Psychiatry
+        - generic [ref=e350]:
+          - img [ref=e351]: location_on
+          - generic [ref=e352]: Manila Doctors Hospital · Room Annex, Room 4
+        - generic [ref=e353]:
+          - generic [ref=e354]: Now serving
+          - generic [ref=e355]: "13"
+        - generic [ref=e356]:
+          - generic [ref=e357]:
+            - generic [ref=e358]: "0"
+            - generic [ref=e359]: waiting
+          - generic [ref=e360]:
+            - generic [ref=e361]: "13"
+            - generic [ref=e362]: last number
+          - generic [ref=e363]:
+            - generic [ref=e364]: "5"
+            - generic [ref=e365]: slots left
+        - generic [ref=e368]:
+          - img [ref=e369]: do_not_disturb_on
+          - generic [ref=e370]: Cut-off — no new patients
+      - link "JT Dr. Jose Tan Orthopaedics Cardinal Santos Medical Center · Room 118 Now serving 7 4 waiting 11 last number 9 slots left Doctor called to an emergency procedure. Back shortly. Paused" [ref=e371] [cursor=pointer]:
+        - /url: /q/d-tan__h-cardinal__2026-08-15
+        - generic [ref=e372]:
+          - generic [ref=e373]: JT
+          - generic [ref=e375]:
+            - heading "Dr. Jose Tan" [level=3] [ref=e376]
+            - paragraph [ref=e377]: Orthopaedics
+        - generic [ref=e378]:
+          - img [ref=e379]: location_on
+          - generic [ref=e380]: Cardinal Santos Medical Center · Room 118
+        - generic [ref=e381]:
+          - generic [ref=e382]: Now serving
+          - generic [ref=e383]: "7"
+        - generic [ref=e384]:
+          - generic [ref=e385]:
+            - generic [ref=e386]: "4"
+            - generic [ref=e387]: waiting
+          - generic [ref=e388]:
+            - generic [ref=e389]: "11"
+            - generic [ref=e390]: last number
+          - generic [ref=e391]:
+            - generic [ref=e392]: "9"
+            - generic [ref=e393]: slots left
+        - generic [ref=e394]:
+          - img [ref=e395]: campaign
+          - generic [ref=e396]: Doctor called to an emergency procedure. Back shortly.
+        - generic [ref=e399]:
+          - img [ref=e400]: pause_circle
+          - generic [ref=e401]: Paused
+      - link "JV Dr. Josefina Villanueva Family Medicine Asian Hospital and Medical Center · Room Annex, Room 4 Now serving 21 0 waiting 21 last number 5 slots left Cut-off — no new patients" [ref=e402] [cursor=pointer]:
+        - /url: /q/d-villanueva__h-asian__2026-08-15
+        - generic [ref=e403]:
+          - generic [ref=e404]: JV
+          - generic [ref=e406]:
+            - heading "Dr. Josefina Villanueva" [level=3] [ref=e407]
+            - paragraph [ref=e408]: Family Medicine
+        - generic [ref=e409]:
+          - img [ref=e410]: location_on
+          - generic [ref=e411]: Asian Hospital and Medical Center · Room Annex, Room 4
+        - generic [ref=e412]:
+          - generic [ref=e413]: Now serving
+          - generic [ref=e414]: "21"
+        - generic [ref=e415]:
+          - generic [ref=e416]:
+            - generic [ref=e417]: "0"
+            - generic [ref=e418]: waiting
+          - generic [ref=e419]:
+            - generic [ref=e420]: "21"
+            - generic [ref=e421]: last number
+          - generic [ref=e422]:
+            - generic [ref=e423]: "5"
+            - generic [ref=e424]: slots left
+        - generic [ref=e427]:
+          - img [ref=e428]: do_not_disturb_on
+          - generic [ref=e429]: Cut-off — no new patients
+      - link "LG Dr. Liza Garcia Otolaryngology (ENT) Makati Medical Center · Room 2nd Flr, Suite B Now serving 6 5 waiting 11 last number 5 slots left Accepting patients ~1h 15m wait" [ref=e430] [cursor=pointer]:
+        - /url: /q/d-garcia__h-makatimed__2026-08-15
+        - generic [ref=e431]:
+          - generic [ref=e432]: LG
+          - generic [ref=e434]:
+            - heading "Dr. Liza Garcia" [level=3] [ref=e435]
+            - paragraph [ref=e436]: Otolaryngology (ENT)
+        - generic [ref=e437]:
+          - img [ref=e438]: location_on
+          - generic [ref=e439]: Makati Medical Center · Room 2nd Flr, Suite B
+        - generic [ref=e440]:
+          - generic [ref=e441]: Now serving
+          - generic [ref=e442]: "6"
+        - generic [ref=e443]:
+          - generic [ref=e444]:
+            - generic [ref=e445]: "5"
+            - generic [ref=e446]: waiting
+          - generic [ref=e447]:
+            - generic [ref=e448]: "11"
+            - generic [ref=e449]: last number
+          - generic [ref=e450]:
+            - generic [ref=e451]: "5"
+            - generic [ref=e452]: slots left
+        - generic [ref=e453]:
+          - generic [ref=e455]:
+            - img [ref=e456]: check_circle
+            - generic [ref=e457]: Accepting patients
+          - generic [ref=e458]: ~1h 15m wait
+      - link "MS Dr. Maria Santos Cardiology St. Luke's Medical Center · Room 204-B Now serving 12 7 waiting 19 last number 11 slots left Accepting patients ~1h 24m wait" [ref=e459] [cursor=pointer]:
+        - /url: /q/d-santos__h-stluke__2026-08-15
+        - generic [ref=e460]:
+          - generic [ref=e461]: MS
+          - generic [ref=e463]:
+            - heading "Dr. Maria Santos" [level=3] [ref=e464]
+            - paragraph [ref=e465]: Cardiology
+        - generic [ref=e466]:
+          - img [ref=e467]: location_on
+          - generic [ref=e468]: St. Luke's Medical Center · Room 204-B
+        - generic [ref=e469]:
+          - generic [ref=e470]: Now serving
+          - generic [ref=e471]: "12"
+        - generic [ref=e472]:
+          - generic [ref=e473]:
+            - generic [ref=e474]: "7"
+            - generic [ref=e475]: waiting
+          - generic [ref=e476]:
+            - generic [ref=e477]: "19"
+            - generic [ref=e478]: last number
+          - generic [ref=e479]:
+            - generic [ref=e480]: "11"
+            - generic [ref=e481]: slots left
+        - generic [ref=e482]:
+          - generic [ref=e484]:
+            - img [ref=e485]: check_circle
+            - generic [ref=e486]: Accepting patients
+          - generic [ref=e487]: ~1h 24m wait
+      - link "MT Dr. Miguel Torres Pulmonology St. Luke's Medical Center · Room 3rd Flr, Clinic 7 Now serving 11 5 waiting 16 last number 5 slots left Doctor on a short break. Paused" [ref=e488] [cursor=pointer]:
+        - /url: /q/d-torres__h-stluke__2026-08-15
+        - generic [ref=e489]:
+          - generic [ref=e490]: MT
+          - generic [ref=e492]:
+            - heading "Dr. Miguel Torres" [level=3] [ref=e493]
+            - paragraph [ref=e494]: Pulmonology
+        - generic [ref=e495]:
+          - img [ref=e496]: location_on
+          - generic [ref=e497]: St. Luke's Medical Center · Room 3rd Flr, Clinic 7
+        - generic [ref=e498]:
+          - generic [ref=e499]: Now serving
+          - generic [ref=e500]: "11"
+        - generic [ref=e501]:
+          - generic [ref=e502]:
+            - generic [ref=e503]: "5"
+            - generic [ref=e504]: waiting
+          - generic [ref=e505]:
+            - generic [ref=e506]: "16"
+            - generic [ref=e507]: last number
+          - generic [ref=e508]:
+            - generic [ref=e509]: "5"
+            - generic [ref=e510]: slots left
+        - generic [ref=e511]:
+          - img [ref=e512]: campaign
+          - generic [ref=e513]: Doctor on a short break.
+        - generic [ref=e516]:
+          - img [ref=e517]: pause_circle
+          - generic [ref=e518]: Paused
+      - link "ND Dr. Noel Dela Cruz Endocrinology Cardinal Santos Medical Center · Room 3rd Flr, Clinic 7 Now serving 7 5 waiting 12 last number 5 slots left Doctor on a short break. Paused" [ref=e519] [cursor=pointer]:
+        - /url: /q/d-delacruz__h-cardinal__2026-08-15
+        - generic [ref=e520]:
+          - generic [ref=e521]: ND
+          - generic [ref=e523]:
+            - heading "Dr. Noel Dela Cruz" [level=3] [ref=e524]
+            - paragraph [ref=e525]: Endocrinology
+        - generic [ref=e526]:
+          - img [ref=e527]: location_on
+          - generic [ref=e528]: Cardinal Santos Medical Center · Room 3rd Flr, Clinic 7
+        - generic [ref=e529]:
+          - generic [ref=e530]: Now serving
+          - generic [ref=e531]: "7"
+        - generic [ref=e532]:
+          - generic [ref=e533]:
+            - generic [ref=e534]: "5"
+            - generic [ref=e535]: waiting
+          - generic [ref=e536]:
+            - generic [ref=e537]: "12"
+            - generic [ref=e538]: last number
+          - generic [ref=e539]:
+            - generic [ref=e540]: "5"
+            - generic [ref=e541]: slots left
+        - generic [ref=e542]:
+          - img [ref=e543]: campaign
+          - generic [ref=e544]: Doctor on a short break.
+        - generic [ref=e547]:
+          - img [ref=e548]: pause_circle
+          - generic [ref=e549]: Paused
+      - link "RC Dr. Ramon Cruz Neurology St. Luke's Medical Center · Room 1st Flr, OPD Now serving 5 5 waiting 10 last number 5 slots left Accepting patients ~50 min wait" [ref=e550] [cursor=pointer]:
+        - /url: /q/d-cruz__h-stluke__2026-08-15
+        - generic [ref=e551]:
+          - generic [ref=e552]: RC
+          - generic [ref=e554]:
+            - heading "Dr. Ramon Cruz" [level=3] [ref=e555]
+            - paragraph [ref=e556]: Neurology
+        - generic [ref=e557]:
+          - img [ref=e558]: location_on
+          - generic [ref=e559]: St. Luke's Medical Center · Room 1st Flr, OPD
+        - generic [ref=e560]:
+          - generic [ref=e561]: Now serving
+          - generic [ref=e562]: "5"
+        - generic [ref=e563]:
+          - generic [ref=e564]:
+            - generic [ref=e565]: "5"
+            - generic [ref=e566]: waiting
+          - generic [ref=e567]:
+            - generic [ref=e568]: "10"
+            - generic [ref=e569]: last number
+          - generic [ref=e570]:
+            - generic [ref=e571]: "5"
+            - generic [ref=e572]: slots left
+        - generic [ref=e573]:
+          - generic [ref=e575]:
+            - img [ref=e576]: check_circle
+            - generic [ref=e577]: Accepting patients
+          - generic [ref=e578]: ~50 min wait
+      - link "RN Dr. Ricardo Navarro Ophthalmology The Medical City · Room 3rd Flr, Clinic 7 Now serving 15 5 waiting 20 last number 5 slots left Doctor on a short break. Paused" [ref=e579] [cursor=pointer]:
+        - /url: /q/d-navarro__h-medicity__2026-08-15
+        - generic [ref=e580]:
+          - generic [ref=e581]: RN
+          - generic [ref=e583]:
+            - heading "Dr. Ricardo Navarro" [level=3] [ref=e584]
+            - paragraph [ref=e585]: Ophthalmology
+        - generic [ref=e586]:
+          - img [ref=e587]: location_on
+          - generic [ref=e588]: The Medical City · Room 3rd Flr, Clinic 7
+        - generic [ref=e589]:
+          - generic [ref=e590]: Now serving
+          - generic [ref=e591]: "15"
+        - generic [ref=e592]:
+          - generic [ref=e593]:
+            - generic [ref=e594]: "5"
+            - generic [ref=e595]: waiting
+          - generic [ref=e596]:
+            - generic [ref=e597]: "20"
+            - generic [ref=e598]: last number
+          - generic [ref=e599]:
+            - generic [ref=e600]: "5"
+            - generic [ref=e601]: slots left
+        - generic [ref=e602]:
+          - img [ref=e603]: campaign
+          - generic [ref=e604]: Doctor on a short break.
+        - generic [ref=e607]:
+          - img [ref=e608]: pause_circle
+          - generic [ref=e609]: Paused
+      - link "RM Dr. Rosario Morales Anaesthesiology Manila Doctors Hospital · Room Annex, Room 4 Now serving 25 0 waiting 25 last number 5 slots left Cut-off — no new patients" [ref=e610] [cursor=pointer]:
+        - /url: /q/d-morales__h-manila__2026-08-15
+        - generic [ref=e611]:
+          - generic [ref=e612]: RM
+          - generic [ref=e614]:
+            - heading "Dr. Rosario Morales" [level=3] [ref=e615]
+            - paragraph [ref=e616]: Anaesthesiology
+        - generic [ref=e617]:
+          - img [ref=e618]: location_on
+          - generic [ref=e619]: Manila Doctors Hospital · Room Annex, Room 4
+        - generic [ref=e620]:
+          - generic [ref=e621]: Now serving
+          - generic [ref=e622]: "25"
+        - generic [ref=e623]:
+          - generic [ref=e624]:
+            - generic [ref=e625]: "0"
+            - generic [ref=e626]: waiting
+          - generic [ref=e627]:
+            - generic [ref=e628]: "25"
+            - generic [ref=e629]: last number
+          - generic [ref=e630]:
+            - generic [ref=e631]: "5"
+            - generic [ref=e632]: slots left
+        - generic [ref=e635]:
+          - img [ref=e636]: do_not_disturb_on
+          - generic [ref=e637]: Cut-off — no new patients

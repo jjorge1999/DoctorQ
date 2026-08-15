@@ -1,0 +1,14 @@
+- generic [ref=f7e3]:
+  - banner [ref=f7e5]:
+    - link "DoctorQ" [ref=f7e6] [cursor=pointer]:
+      - /url: /
+      - img [ref=f7e8]: graphic_eq
+    - link "Staff sign in" [ref=f7e10] [cursor=pointer]:
+      - /url: /console
+      - img [ref=f7e11]: lock
+  - main [ref=f7e15]:
+    - link "All clinics" [ref=f7e16] [cursor=pointer]:
+      - /url: /
+      - img [ref=f7e17]: arrow_back
+      - text: All clinics
+    - progressbar [ref=f7e19]

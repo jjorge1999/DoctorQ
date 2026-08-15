@@ -1,0 +1,20 @@
+- generic [ref=f1e3]:
+  - banner [ref=f1e5]:
+    - generic [ref=f1e6]:
+      - img [ref=f1e8]: graphic_eq
+      - generic [ref=f1e9]: DoctorQ
+    - generic [ref=f1e10]:
+      - img [ref=f1e11]: lock
+      - generic [ref=f1e12]: Staff sign in
+  - generic [ref=f1e16]:
+    - generic [ref=f1e17]: Live · updates automatically
+    - heading "Know the queue before you leave home." [level=1] [ref=f1e19]
+    - paragraph [ref=f1e20]: Current queue numbers for every clinic running today. Check whether your doctor is still accepting patients — and skip the trip if the cut-off has already passed.
+  - main [ref=f1e21]:
+    - generic [ref=f1e22]:
+      - generic [ref=f1e23]:
+        - heading "Today's clinics" [level=2] [ref=f1e24]
+        - paragraph
+      - generic [ref=f1e25]:
+        - textbox "e.g. cardiology" [ref=f1e30]
+        - combobox [ref=f1e36]

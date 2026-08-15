@@ -1,0 +1,83 @@
+[debug] [2026-08-15T05:40:25.570Z] ----------------------------------------------------------------------
+[debug] [2026-08-15T05:40:25.579Z] Command:       C:\Program Files\nodejs\node.exe C:\DoctorQ\doctorq\node_modules\firebase-tools\lib\bin\firebase.js emulators:start --only auth,firestore --project demo-doctorq
+[debug] [2026-08-15T05:40:25.579Z] CLI Version:   14.27.0
+[debug] [2026-08-15T05:40:25.580Z] Platform:      win32
+[debug] [2026-08-15T05:40:25.580Z] Node Version:  v24.15.0
+[debug] [2026-08-15T05:40:25.580Z] Time:          Sat Aug 15 2026 13:40:25 GMT+0800 (Philippine Standard Time)
+[debug] [2026-08-15T05:40:25.580Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2026-08-15T05:40:26.607Z] java version "26.0.1" 2026-04-21
+
+[debug] [2026-08-15T05:40:26.608Z] Java(TM) SE Runtime Environment (build 26.0.1+8-34)
+Java HotSpot(TM) 64-Bit Server VM (build 26.0.1+8-34, mixed mode, sharing)
+
+[debug] [2026-08-15T05:40:26.630Z] Parsed Java major version: 26
+[info] i  emulators: Starting emulators: auth, firestore {"metadata":{"emulator":{"name":"hub"},"message":"Starting emulators: auth, firestore"}}
+[info] i  emulators: Detected demo project ID "demo-doctorq", emulated services will use a demo configuration and attempts to access non-emulated services for this project will fail. {"metadata":{"emulator":{"name":"hub"},"message":"Detected demo project ID \"demo-doctorq\", emulated services will use a demo configuration and attempts to access non-emulated services for this project will fail."}}
+[debug] [2026-08-15T05:40:26.664Z] [logging] Logging Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2026-08-15T05:40:26.665Z] [auth] Authentication Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2026-08-15T05:40:26.665Z] [firestore] Firestore Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2026-08-15T05:40:26.665Z] [firestore.websocket] websocket server for firestore only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2026-08-15T05:40:26.665Z] assigned listening specs for emulators {"user":{"hub":[{"address":"127.0.0.1","family":"IPv4","port":4400},{"address":"::1","family":"IPv6","port":4400}],"ui":[{"address":"127.0.0.1","family":"IPv4","port":4001},{"address":"::1","family":"IPv6","port":4001}],"logging":[{"address":"127.0.0.1","family":"IPv4","port":4500}],"auth":[{"address":"127.0.0.1","family":"IPv4","port":9099}],"firestore":[{"address":"127.0.0.1","family":"IPv4","port":8080}],"firestore.websocket":[{"address":"127.0.0.1","family":"IPv4","port":9150}]},"metadata":{"message":"assigned listening specs for emulators"}}
+[debug] [2026-08-15T05:40:26.672Z] Emulator locator file path: C:\Users\JOMERT~1\AppData\Local\Temp\hub-demo-doctorq.json
+[debug] [2026-08-15T05:40:26.672Z] [hub] writing locator at C:\Users\JOMERT~1\AppData\Local\Temp\hub-demo-doctorq.json
+[debug] [2026-08-15T05:40:26.694Z] Ignoring unsupported arg: auto_download {"metadata":{"emulator":{"name":"firestore"},"message":"Ignoring unsupported arg: auto_download"}}
+[debug] [2026-08-15T05:40:26.695Z] Ignoring unsupported arg: single_project_mode_error {"metadata":{"emulator":{"name":"firestore"},"message":"Ignoring unsupported arg: single_project_mode_error"}}
+[debug] [2026-08-15T05:40:26.695Z] Starting Firestore Emulator with command {"binary":"java","args":["-Dgoogle.cloud_firestore.debug_log_level=FINE","-Duser.language=en","-jar","C:\\Users\\JomerTrilloJorge\\.cache\\firebase\\emulators\\cloud-firestore-emulator-v1.19.8.jar","--host","127.0.0.1","--port",8080,"--websocket_port",9150,"--project_id","demo-doctorq","--rules","C:\\DoctorQ\\doctorq\\firestore.rules","--single_project_mode",true],"optionalArgs":["port","webchannel_port","host","rules","websocket_port","functions_emulator","seed_from_export","project_id","single_project_mode"],"joinArgs":false,"shell":false,"port":8080} {"metadata":{"emulator":{"name":"firestore"},"message":"Starting Firestore Emulator with command {\"binary\":\"java\",\"args\":[\"-Dgoogle.cloud_firestore.debug_log_level=FINE\",\"-Duser.language=en\",\"-jar\",\"C:\\\\Users\\\\JomerTrilloJorge\\\\.cache\\\\firebase\\\\emulators\\\\cloud-firestore-emulator-v1.19.8.jar\",\"--host\",\"127.0.0.1\",\"--port\",8080,\"--websocket_port\",9150,\"--project_id\",\"demo-doctorq\",\"--rules\",\"C:\\\\DoctorQ\\\\doctorq\\\\firestore.rules\",\"--single_project_mode\",true],\"optionalArgs\":[\"port\",\"webchannel_port\",\"host\",\"rules\",\"websocket_port\",\"functions_emulator\",\"seed_from_export\",\"project_id\",\"single_project_mode\"],\"joinArgs\":false,\"shell\":false,\"port\":8080}"}}
+[info] i  firestore: Firestore Emulator logging to firestore-debug.log {"metadata":{"emulator":{"name":"firestore"},"message":"Firestore Emulator logging to \u001b[1mfirestore-debug.log\u001b[22m"}}
+[info] +  firestore: Firestore Emulator UI websocket is running on 9150. {"metadata":{"emulator":{"name":"firestore"},"message":"Firestore Emulator UI websocket is running on 9150."}}
+[debug] [2026-08-15T05:40:53.054Z] Error: listen EADDRINUSE: address already in use 127.0.0.1:4500
+    at Server.setupListenHandle [as _listen2] (node:net:2008:16)
+    at listenInCluster (node:net:2065:12)
+    at node:net:2274:7
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
+[error] 
+[error] Error: An unexpected error has occurred.
+[debug] [2026-08-15T05:40:53.089Z] Could not find VSCode notification endpoint: FetchError: request to http://localhost:40001/vscode/notify failed, reason: . If you are not running the Firebase Data Connect VSCode extension, this is expected and not an issue.
+[debug] [2026-08-15T05:42:17.341Z] ----------------------------------------------------------------------
+[debug] [2026-08-15T05:42:17.347Z] Command:       C:\Program Files\nodejs\node.exe C:\DoctorQ\doctorq\node_modules\firebase-tools\lib\bin\firebase.js emulators:start --only auth,firestore --project demo-doctorq
+[debug] [2026-08-15T05:42:17.348Z] CLI Version:   14.27.0
+[debug] [2026-08-15T05:42:17.348Z] Platform:      win32
+[debug] [2026-08-15T05:42:17.348Z] Node Version:  v24.15.0
+[debug] [2026-08-15T05:42:17.348Z] Time:          Sat Aug 15 2026 13:42:17 GMT+0800 (Philippine Standard Time)
+[debug] [2026-08-15T05:42:17.349Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2026-08-15T05:42:18.304Z] java version "26.0.1" 2026-04-21
+
+[debug] [2026-08-15T05:42:18.305Z] Java(TM) SE Runtime Environment (build 26.0.1+8-34)
+Java HotSpot(TM) 64-Bit Server VM (build 26.0.1+8-34, mixed mode, sharing)
+
+[debug] [2026-08-15T05:42:18.345Z] Parsed Java major version: 26
+[info] i  emulators: Starting emulators: auth, firestore {"metadata":{"emulator":{"name":"hub"},"message":"Starting emulators: auth, firestore"}}
+[info] i  emulators: Detected demo project ID "demo-doctorq", emulated services will use a demo configuration and attempts to access non-emulated services for this project will fail. {"metadata":{"emulator":{"name":"hub"},"message":"Detected demo project ID \"demo-doctorq\", emulated services will use a demo configuration and attempts to access non-emulated services for this project will fail."}}
+[debug] [2026-08-15T05:42:18.390Z] [logging] Logging Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2026-08-15T05:42:18.391Z] [auth] Authentication Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2026-08-15T05:42:18.391Z] [firestore] Firestore Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2026-08-15T05:42:18.391Z] [firestore.websocket] websocket server for firestore only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2026-08-15T05:42:18.391Z] assigned listening specs for emulators {"user":{"hub":[{"address":"127.0.0.1","family":"IPv4","port":4400},{"address":"::1","family":"IPv6","port":4400}],"ui":[{"address":"127.0.0.1","family":"IPv4","port":4001},{"address":"::1","family":"IPv6","port":4001}],"logging":[{"address":"127.0.0.1","family":"IPv4","port":4500}],"auth":[{"address":"127.0.0.1","family":"IPv4","port":9099}],"firestore":[{"address":"127.0.0.1","family":"IPv4","port":8080}],"firestore.websocket":[{"address":"127.0.0.1","family":"IPv4","port":9150}]},"metadata":{"message":"assigned listening specs for emulators"}}
+[debug] [2026-08-15T05:42:18.399Z] Emulator locator file path: C:\Users\JOMERT~1\AppData\Local\Temp\hub-demo-doctorq.json
+[debug] [2026-08-15T05:42:18.399Z] [hub] writing locator at C:\Users\JOMERT~1\AppData\Local\Temp\hub-demo-doctorq.json
+[debug] [2026-08-15T05:42:18.422Z] Ignoring unsupported arg: auto_download {"metadata":{"emulator":{"name":"firestore"},"message":"Ignoring unsupported arg: auto_download"}}
+[debug] [2026-08-15T05:42:18.422Z] Ignoring unsupported arg: single_project_mode_error {"metadata":{"emulator":{"name":"firestore"},"message":"Ignoring unsupported arg: single_project_mode_error"}}
+[debug] [2026-08-15T05:42:18.423Z] Starting Firestore Emulator with command {"binary":"java","args":["-Dgoogle.cloud_firestore.debug_log_level=FINE","-Duser.language=en","-jar","C:\\Users\\JomerTrilloJorge\\.cache\\firebase\\emulators\\cloud-firestore-emulator-v1.19.8.jar","--host","127.0.0.1","--port",8080,"--websocket_port",9150,"--project_id","demo-doctorq","--rules","C:\\DoctorQ\\doctorq\\firestore.rules","--single_project_mode",true],"optionalArgs":["port","webchannel_port","host","rules","websocket_port","functions_emulator","seed_from_export","project_id","single_project_mode"],"joinArgs":false,"shell":false,"port":8080} {"metadata":{"emulator":{"name":"firestore"},"message":"Starting Firestore Emulator with command {\"binary\":\"java\",\"args\":[\"-Dgoogle.cloud_firestore.debug_log_level=FINE\",\"-Duser.language=en\",\"-jar\",\"C:\\\\Users\\\\JomerTrilloJorge\\\\.cache\\\\firebase\\\\emulators\\\\cloud-firestore-emulator-v1.19.8.jar\",\"--host\",\"127.0.0.1\",\"--port\",8080,\"--websocket_port\",9150,\"--project_id\",\"demo-doctorq\",\"--rules\",\"C:\\\\DoctorQ\\\\doctorq\\\\firestore.rules\",\"--single_project_mode\",true],\"optionalArgs\":[\"port\",\"webchannel_port\",\"host\",\"rules\",\"websocket_port\",\"functions_emulator\",\"seed_from_export\",\"project_id\",\"single_project_mode\"],\"joinArgs\":false,\"shell\":false,\"port\":8080}"}}
+[info] i  firestore: Firestore Emulator logging to firestore-debug.log {"metadata":{"emulator":{"name":"firestore"},"message":"Firestore Emulator logging to \u001b[1mfirestore-debug.log\u001b[22m"}}
+[info] +  firestore: Firestore Emulator UI websocket is running on 9150. {"metadata":{"emulator":{"name":"firestore"},"message":"Firestore Emulator UI websocket is running on 9150."}}
+[debug] [2026-08-15T05:42:46.395Z] Could not find VSCode notification endpoint: FetchError: request to http://localhost:40001/vscode/notify failed, reason: . If you are not running the Firebase Data Connect VSCode extension, this is expected and not an issue.
+[info] 
+┌─────────────────────────────────────────────────────────────┐
+│ ✔  All emulators ready! It is now safe to connect your app. │
+│ i  View Emulator UI at http://127.0.0.1:4001/               │
+└─────────────────────────────────────────────────────────────┘
+
+┌────────────────┬────────────────┬─────────────────────────────────┐
+│ Emulator       │ Host:Port      │ View in Emulator UI             │
+├────────────────┼────────────────┼─────────────────────────────────┤
+│ Authentication │ 127.0.0.1:9099 │ http://127.0.0.1:4001/auth      │
+├────────────────┼────────────────┼─────────────────────────────────┤
+│ Firestore      │ 127.0.0.1:8080 │ http://127.0.0.1:4001/firestore │
+└────────────────┴────────────────┴─────────────────────────────────┘
+  Emulator Hub host: 127.0.0.1 port: 4400
+  Other reserved ports: 4500, 9150
+
+Issues? Report them at https://github.com/firebase/firebase-tools/issues and attach the *-debug.log files.
+ 

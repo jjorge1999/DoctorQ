@@ -3,11 +3,11 @@ export const environment = {
   production: true,
   useEmulators: false,
   firebase: {
-    apiKey: 'REPLACE_ME',
-    authDomain: 'REPLACE_ME.firebaseapp.com',
-    projectId: 'REPLACE_ME',
-    storageBucket: 'REPLACE_ME.appspot.com',
-    messagingSenderId: 'REPLACE_ME',
-    appId: 'REPLACE_ME',
+    apiKey: 'AIzaSyBqGpY2SxG4JsXgsZ8fhTQb409NV8tB5qw',
+    authDomain: 'doctorq-ab867.firebaseapp.com',
+    projectId: 'doctorq-ab867',
+    storageBucket: 'doctorq-ab867.firebasestorage.app',
+    messagingSenderId: '338685872626',
+    appId: '1:338685872626:web:d85aec77a140aab8a0036b',
   },
 };
