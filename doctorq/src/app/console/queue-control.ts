@@ -14,6 +14,7 @@ import { DirectoryService } from '../core/directory.service';
 import { QueueBoardEntry, QueueStatus } from '../core/models';
 import { QueueService } from '../core/queue.service';
 import { confirmDialog, formDialog } from '../shared/dialog';
+import { LiveNumber } from '../shared/live-number';
 import { StatusChip } from '../shared/status-chip';
 import { ConfirmDialog } from './confirm-dialog';
 import { QueueDialog } from './queue-dialog';
@@ -29,6 +30,7 @@ import { QueueDialog } from './queue-dialog';
     MatMenuModule,
     MatProgressSpinnerModule,
     MatTooltipModule,
+    LiveNumber,
     StatusChip,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,

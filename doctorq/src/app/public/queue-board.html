@@ -89,11 +89,11 @@
 
           <div class="now">
             <div class="now-label">Now serving</div>
-            <div class="now-number numeral">
+            <div class="now-number">
               @if (entry.session.nowServing > 0) {
-                {{ entry.session.nowServing }}
+                <app-live-number [value]="entry.session.nowServing" />
               } @else {
-                <span class="not-started">—</span>
+                <span class="not-started numeral">—</span>
               }
             </div>
             @if (entry.session.nowServing === 0) {

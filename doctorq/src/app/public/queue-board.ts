@@ -11,6 +11,7 @@ import { RouterLink } from '@angular/router';
 import { DirectoryService } from '../core/directory.service';
 import { QueueBoardEntry } from '../core/models';
 import { QueueService } from '../core/queue.service';
+import { LiveNumber } from '../shared/live-number';
 import { PublicHeader } from '../shared/public-header';
 import { StatusChip } from '../shared/status-chip';
 
@@ -25,6 +26,7 @@ import { StatusChip } from '../shared/status-chip';
     MatInputModule,
     MatProgressSpinnerModule,
     MatSelectModule,
+    LiveNumber,
     PublicHeader,
     StatusChip,
   ],
