@@ -13,6 +13,11 @@ export const routes: Routes = [
     title: 'Queue · DoctorQ',
   },
   {
+    path: 'help',
+    loadComponent: () => import('./public/help-page').then((m) => m.HelpPage),
+    title: 'Help & FAQ · DoctorQ',
+  },
+  {
     path: 'login',
     loadComponent: () => import('./console/login').then((m) => m.Login),
     title: 'Staff sign in · DoctorQ',

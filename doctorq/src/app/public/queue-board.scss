@@ -116,6 +116,12 @@
     box-shadow 160ms ease,
     border-color 160ms ease;
 
+  // Off-screen cards skip layout/paint entirely until they near the viewport — the grid can
+  // grow to any number of clinics without every card costing render time up front. The intrinsic
+  // size is a placeholder only, so scrollbar height stays stable before a card first renders.
+  content-visibility: auto;
+  contain-intrinsic-size: 0 420px;
+
   &:hover {
     transform: translateY(-2px);
     border-color: color-mix(in srgb, var(--mat-sys-primary) 40%, var(--app-border));

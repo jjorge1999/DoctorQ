@@ -66,7 +66,12 @@
           <div class="card-head">
             <div class="avatar">
               @if (entry.doctor?.photoUrl) {
-                <img [src]="entry.doctor!.photoUrl" [alt]="entry.doctor!.fullName" />
+                <img
+                  [src]="entry.doctor!.photoUrl"
+                  [alt]="entry.doctor!.fullName"
+                  loading="lazy"
+                  decoding="async"
+                />
               } @else {
                 <span>{{ initials(entry.doctor?.fullName) }}</span>
               }

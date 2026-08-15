@@ -1,0 +1,71 @@
+<app-public-header />
+
+<main class="page">
+  <h1 class="page-title">Help &amp; FAQ</h1>
+  <p class="page-subtitle">
+    Answers for patients checking a queue, and a walkthrough for staff running one.
+  </p>
+
+  @if (sectionCount() > 1) {
+    <nav class="jump-nav">
+      <a href="#patients">For patients</a>
+      <a href="#staff">For staff{{ isAdmin() ? ' & admins' : '' }}</a>
+    </nav>
+  }
+
+  <section id="patients" class="surface-card faq-section">
+    <h2>For patients</h2>
+    <mat-accordion multi>
+      @for (item of patientFaqs; track item.q) {
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title>{{ item.q }}</mat-panel-title>
+          </mat-expansion-panel-header>
+          <p>{{ item.a }}</p>
+        </mat-expansion-panel>
+      }
+    </mat-accordion>
+  </section>
+
+  @if (showStaffSection()) {
+    <section id="staff" class="surface-card faq-section">
+      <h2>For staff{{ isAdmin() ? ' & admins' : '' }}</h2>
+      <mat-accordion multi>
+        @for (item of staffFaqs; track item.q) {
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>{{ item.q }}</mat-panel-title>
+            </mat-expansion-panel-header>
+            <p>{{ item.a }}</p>
+          </mat-expansion-panel>
+        }
+        @for (item of adminFaqs(); track item.q) {
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>{{ item.q }}</mat-panel-title>
+            </mat-expansion-panel-header>
+            <p>{{ item.a }}</p>
+          </mat-expansion-panel>
+        }
+      </mat-accordion>
+    </section>
+  } @else if (showPendingNotice()) {
+    <div class="empty-state surface-card">
+      <mat-icon>hourglass_top</mat-icon>
+      <h3>Waiting for approval</h3>
+      <p>
+        Your account is set up, but an administrator has to let it through before the console
+        guide applies to you.
+      </p>
+    </div>
+  } @else if (showSignInCallout()) {
+    <div class="signin-callout surface-card">
+      <mat-icon>lock</mat-icon>
+      <div>
+        <h3>Running a queue?</h3>
+        <p>Sign in as staff to see the console guide.</p>
+      </div>
+      <a mat-stroked-button routerLink="/login">Staff sign in</a>
+    </div>
+  }
+</main>

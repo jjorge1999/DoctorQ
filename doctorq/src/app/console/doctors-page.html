@@ -56,7 +56,12 @@
             <div class="person">
               <div class="avatar">
                 @if (doctor.photoUrl) {
-                  <img [src]="doctor.photoUrl" [alt]="doctor.fullName" />
+                  <img
+                    [src]="doctor.photoUrl"
+                    [alt]="doctor.fullName"
+                    loading="lazy"
+                    decoding="async"
+                  />
                 } @else {
                   <span>{{ initials(doctor.fullName) }}</span>
                 }

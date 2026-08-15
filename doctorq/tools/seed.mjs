@@ -149,8 +149,25 @@ const hospitals = [
   },
 ];
 
-/** Deterministic per-doctor portrait so re-running the seed doesn't reshuffle faces. */
-const photoUrl = (id) => `https://i.pravatar.cc/300?u=${id}`;
+/**
+ * A formal doctor avatar, drawn locally rather than fetched from a stock-photo API: no photo
+ * service reliably returns *doctors* (white coat, stethoscope) as opposed to generic headshots,
+ * and this way every avatar renders identically with no external dependency or licensing concern.
+ * `index` just picks the badge colour, rotating through the app's palette so 20 doctors stay
+ * visually distinct.
+ */
+const AVATAR_HUES = [206, 168, 258, 12, 340, 40, 150, 280, 190, 96];
+const photoUrl = (index) => {
+  const bg = `hsl(${AVATAR_HUES[index % AVATAR_HUES.length]} 42% 34%)`;
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+<rect width="100" height="100" rx="20" fill="${bg}"/>
+<circle cx="50" cy="37" r="15" fill="#fff"/>
+<path d="M21 90c0-20 13-32 29-32s29 12 29 32" fill="#fff"/>
+<path d="M39 59v9a11 11 0 0 0 22 0v-9" fill="none" stroke="${bg}" stroke-width="3" stroke-linecap="round"/>
+<circle cx="61" cy="71" r="3.4" fill="${bg}"/>
+</svg>`;
+  return `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
+};
 
 const doctors = [
   {
@@ -160,7 +177,7 @@ const doctors = [
     licenseNo: 'PRC-0114523',
     hospitalIds: ['h-stluke', 'h-makatimed'],
     bio: 'Interventional cardiologist. Consultations for hypertension, arrhythmia and post-operative follow-up.',
-    photoUrl: photoUrl('d-santos'),
+    photoUrl: photoUrl(0),
   },
   {
     id: 'd-reyes',
@@ -169,7 +186,7 @@ const doctors = [
     licenseNo: 'PRC-0098311',
     hospitalIds: ['h-makatimed'],
     bio: 'General paediatrics, newborn care and childhood immunisation.',
-    photoUrl: photoUrl('d-reyes'),
+    photoUrl: photoUrl(1),
   },
   {
     id: 'd-lim',
@@ -178,7 +195,7 @@ const doctors = [
     licenseNo: 'PRC-0132994',
     hospitalIds: ['h-cardinal', 'h-stluke'],
     bio: 'Medical and surgical dermatology, with a focus on chronic skin conditions.',
-    photoUrl: photoUrl('d-lim'),
+    photoUrl: photoUrl(2),
   },
   {
     id: 'd-tan',
@@ -187,7 +204,7 @@ const doctors = [
     licenseNo: 'PRC-0076140',
     hospitalIds: ['h-cardinal'],
     bio: 'Sports injuries, joint replacement and fracture care.',
-    photoUrl: photoUrl('d-tan'),
+    photoUrl: photoUrl(3),
   },
 ];
 
@@ -217,7 +234,7 @@ const extraDoctorSpecs = [
   licenseNo: `PRC-${licenseNo}`,
   hospitalIds: [hospitals[i % hospitals.length].id],
   bio: `${specialty} consultations and follow-up care.`,
-  photoUrl: photoUrl(id),
+  photoUrl: photoUrl(4 + i),
 }));
 
 doctors.push(...extraDoctorSpecs);

@@ -1,7 +1,8 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterLink } from '@angular/router';
+import { AuthService } from '../core/auth.service';
 
 @Component({
   selector: 'app-public-header',
@@ -13,10 +14,23 @@ import { RouterLink } from '@angular/router';
         <span class="mark"><mat-icon>graphic_eq</mat-icon></span>
         <span class="name">Doctor<b>Q</b></span>
       </a>
-      <a mat-stroked-button routerLink="/console">
-        <mat-icon>lock</mat-icon>
-        Staff sign in
-      </a>
+      <div class="actions">
+        <a mat-button routerLink="/help">
+          <mat-icon>help_outline</mat-icon>
+          Help
+        </a>
+        @if (isSignedIn()) {
+          <a mat-stroked-button routerLink="/console">
+            <mat-icon>dashboard</mat-icon>
+            Console
+          </a>
+        } @else {
+          <a mat-stroked-button routerLink="/console">
+            <mat-icon>lock</mat-icon>
+            Staff sign in
+          </a>
+        }
+      </div>
     </header>
   `,
   styles: `
@@ -67,6 +81,15 @@ import { RouterLink } from '@angular/router';
     .name b {
       color: var(--mat-sys-primary);
     }
+
+    .actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
   `,
 })
-export class PublicHeader {}
+export class PublicHeader {
+  private readonly auth = inject(AuthService);
+  readonly isSignedIn = this.auth.isSignedIn;
+}
