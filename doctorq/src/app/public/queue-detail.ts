@@ -1,6 +1,7 @@
 import { DatePipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { animate, style, transition, trigger } from '@angular/animations';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
@@ -9,8 +10,13 @@ import { RouterLink } from '@angular/router';
 import { map, switchMap } from 'rxjs';
 import { toObservable } from '@angular/core/rxjs-interop';
 import { QueueService } from '../core/queue.service';
+import { LiveNumber } from '../shared/live-number';
 import { PublicHeader } from '../shared/public-header';
 import { StatusChip } from '../shared/status-chip';
+
+const ADVICE_FADE = trigger('adviceFade', [
+  transition('* => *', [style({ opacity: 0.25 }), animate('220ms ease', style({ opacity: 1 }))]),
+]);
 
 @Component({
   selector: 'app-queue-detail',
@@ -21,10 +27,12 @@ import { StatusChip } from '../shared/status-chip';
     MatDividerModule,
     MatIconModule,
     MatProgressSpinnerModule,
+    LiveNumber,
     PublicHeader,
     StatusChip,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  animations: [ADVICE_FADE],
   templateUrl: './queue-detail.html',
   styleUrl: './queue-detail.scss',
 })
@@ -50,6 +58,9 @@ export class QueueDetail {
   readonly loading = computed(() => this.entryQuery() === undefined);
   readonly entry = computed(() => this.entryQuery()?.entry);
   readonly today = new Date();
+
+  readonly prefersReducedMotion =
+    typeof matchMedia === 'function' ? matchMedia('(prefers-reduced-motion: reduce)').matches : false;
 
   /**
    * The advice line — the whole reason a patient opens this page before travelling.

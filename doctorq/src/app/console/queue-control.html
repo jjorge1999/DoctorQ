@@ -79,7 +79,27 @@
   } @else {
     <div class="queues">
       @for (entry of board(); track entry.session.id) {
-        <article class="queue surface-card">
+        <article class="queue surface-card swipe-card">
+          <div class="swipe-actions">
+            <button
+              class="swipe-action call"
+              [disabled]="isBusy(entry.session.id) || entry.waiting === 0"
+              (click)="callNext(entry); swipe.close()"
+            >
+              <mat-icon>skip_next</mat-icon>
+              <span>Call next</span>
+            </button>
+            <button
+              class="swipe-action pause"
+              [disabled]="isBusy(entry.session.id) || entry.session.status === 'paused'"
+              (click)="setStatus(entry, 'paused'); swipe.close()"
+            >
+              <mat-icon>pause_circle</mat-icon>
+              <span>Pause</span>
+            </button>
+          </div>
+
+          <div class="swipe-surface" appSwipeReveal #swipe="appSwipeReveal">
           <header>
             <div class="title-row">
               <div class="who">
@@ -122,28 +142,34 @@
           <div class="body">
             <div class="serving">
               <span class="label">Now serving</span>
-              <span class="value numeral">
-                {{ entry.session.nowServing > 0 ? entry.session.nowServing : '—' }}
+              <span class="value">
+                @if (entry.session.nowServing > 0) {
+                  <app-live-number [value]="entry.session.nowServing" />
+                } @else {
+                  <span class="numeral">—</span>
+                }
               </span>
             </div>
 
             <div class="metrics">
               <div>
-                <span class="numeral">{{ entry.session.lastIssued }}</span>
+                <app-live-number [value]="entry.session.lastIssued" />
                 <small>Last issued</small>
               </div>
               <div>
-                <span class="numeral">{{ entry.waiting }}</span>
+                <app-live-number [value]="entry.waiting" />
                 <small>Waiting</small>
               </div>
               <div>
-                <span class="numeral">
-                  {{ entry.slotsLeft === null ? '∞' : entry.slotsLeft }}
-                </span>
+                @if (entry.slotsLeft === null) {
+                  <span class="numeral">∞</span>
+                } @else {
+                  <app-live-number [value]="entry.slotsLeft" />
+                }
                 <small>Slots left</small>
               </div>
               <div>
-                <span class="numeral">{{ entry.estimatedWaitMinutes }}m</span>
+                <app-live-number [value]="entry.estimatedWaitMinutes" />m
                 <small>Est. wait</small>
               </div>
             </div>
@@ -222,6 +248,7 @@
               {{ entry.session.note }}
             </p>
           }
+          </div>
         </article>
       }
     </div>

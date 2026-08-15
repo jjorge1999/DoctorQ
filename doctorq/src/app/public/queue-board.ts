@@ -1,18 +1,40 @@
 import { DatePipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { animate, query, stagger, style, transition, trigger } from '@angular/animations';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSelectModule } from '@angular/material/select';
+import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { RouterLink } from '@angular/router';
 import { DirectoryService } from '../core/directory.service';
 import { QueueBoardEntry } from '../core/models';
 import { QueueService } from '../core/queue.service';
+import { HospitalFilterSheet } from './hospital-filter-sheet';
+import { LiveNumber } from '../shared/live-number';
 import { PublicHeader } from '../shared/public-header';
 import { StatusChip } from '../shared/status-chip';
+
+const CARD_STAGGER = trigger('cardStagger', [
+  transition('* => *', [
+    query(
+      ':enter',
+      [
+        style({ opacity: 0, transform: 'translateY(14px)' }),
+        stagger(45, [
+          animate(
+            '340ms cubic-bezier(0.16, 1, 0.3, 1)',
+            style({ opacity: 1, transform: 'translateY(0)' }),
+          ),
+        ]),
+      ],
+      { optional: true },
+    ),
+  ]),
+]);
 
 @Component({
   selector: 'app-queue-board',
@@ -25,10 +47,12 @@ import { StatusChip } from '../shared/status-chip';
     MatInputModule,
     MatProgressSpinnerModule,
     MatSelectModule,
+    LiveNumber,
     PublicHeader,
     StatusChip,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  animations: [CARD_STAGGER],
   templateUrl: './queue-board.html',
   styleUrl: './queue-board.scss',
 })
@@ -58,6 +82,24 @@ export class QueueBoard {
   });
 
   readonly openCount = computed(() => this.visible().filter((e) => e.acceptingNewPatients).length);
+
+  readonly prefersReducedMotion =
+    typeof matchMedia === 'function' ? matchMedia('(prefers-reduced-motion: reduce)').matches : false;
+
+  private readonly bottomSheet = inject(MatBottomSheet);
+
+  readonly activeHospitalName = computed(
+    () => this.hospitals().find((h) => h.id === this.hospitalFilter())?.name ?? '',
+  );
+
+  openHospitalFilter(): void {
+    const ref = this.bottomSheet.open(HospitalFilterSheet, {
+      data: { hospitals: this.hospitals(), selected: this.hospitalFilter() },
+    });
+    ref.afterDismissed().subscribe((hospitalId) => {
+      if (hospitalId) this.hospitalFilter.set(hospitalId);
+    });
+  }
 
   initials(name = ''): string {
     return (

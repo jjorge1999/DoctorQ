@@ -1,16 +1,19 @@
 import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { filter, map } from 'rxjs';
 import { MatButtonModule } from '@angular/material/button';
+import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { NavigationEnd, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { AuthService } from '../core/auth.service';
 import { DirectoryService } from '../core/directory.service';
 import { SettingsService } from '../core/settings.service';
 import { UsersService } from '../core/users.service';
+import { MoreNavSheet } from './more-nav-sheet';
 
 @Component({
   selector: 'app-console-shell',
@@ -82,6 +85,42 @@ export class ConsoleShell {
   /** The badge only makes sense on the one item it refers to. */
   badgeFor(path: string): number {
     return path === 'approvals' ? this.pendingCount() : 0;
+  }
+
+  private readonly bottomSheet = inject(MatBottomSheet);
+  private readonly primaryPaths = ['queues', 'doctors', 'hospitals'];
+
+  readonly primaryNav = computed(() =>
+    this.nav().filter((item) => this.primaryPaths.includes(item.path)),
+  );
+  readonly moreNav = computed(() =>
+    this.nav().filter((item) => !this.primaryPaths.includes(item.path)),
+  );
+  readonly moreBadgeCount = computed(() =>
+    this.moreNav().reduce((sum, item) => sum + this.badgeFor(item.path), 0),
+  );
+  readonly tabCount = computed(() => this.primaryNav().length + (this.moreNav().length ? 1 : 0));
+
+  private readonly currentUrl = toSignal(
+    this.router.events.pipe(
+      filter((e): e is NavigationEnd => e instanceof NavigationEnd),
+      map(() => this.router.url),
+    ),
+    { initialValue: this.router.url },
+  );
+
+  readonly activeTabIndex = computed(() => {
+    const url = this.currentUrl();
+    const primary = this.primaryNav();
+    const idx = primary.findIndex((item) => url.includes(`/console/${item.path}`));
+    if (idx !== -1) return idx;
+    return this.moreNav().some((item) => url.includes(`/console/${item.path}`)) ? primary.length : 0;
+  });
+
+  openMoreNav(): void {
+    this.bottomSheet.open(MoreNavSheet, {
+      data: this.moreNav().map((item) => ({ ...item, badge: this.badgeFor(item.path) })),
+    });
   }
 
   initials(name = ''): string {

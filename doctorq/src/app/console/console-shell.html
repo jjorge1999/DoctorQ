@@ -69,6 +69,16 @@
   </mat-sidenav>
 
   <mat-sidenav-content>
+    <header class="mobile-topbar">
+      <button class="account" [matMenuTriggerFor]="menu" aria-label="Account menu">
+        <span class="avatar">{{ initials(user()?.displayName || user()?.email) }}</span>
+      </button>
+      <span class="mobile-title">{{ isAdmin() ? 'Admin console' : 'Staff console' }}</span>
+      <a class="board-link" routerLink="/" target="_blank" rel="noopener" aria-label="View public board">
+        <mat-icon>open_in_new</mat-icon>
+      </a>
+    </header>
+
     @if (isApproved()) {
       <router-outlet />
     } @else {
@@ -88,3 +98,25 @@
     }
   </mat-sidenav-content>
 </mat-sidenav-container>
+
+<nav class="tabbar" [style.--tab-count]="tabCount()" [style.--active-index]="activeTabIndex()">
+  <span class="indicator"></span>
+  @for (item of primaryNav(); track item.path) {
+    <a [routerLink]="item.path" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: false }">
+      <mat-icon>{{ item.icon }}</mat-icon>
+      <span>{{ item.label }}</span>
+      @if (badgeFor(item.path); as count) {
+        <span class="badge">{{ count }}</span>
+      }
+    </a>
+  }
+  @if (moreNav().length) {
+    <button class="tab" (click)="openMoreNav()">
+      <mat-icon>more_horiz</mat-icon>
+      <span>More</span>
+      @if (moreBadgeCount(); as count) {
+        <span class="badge">{{ count }}</span>
+      }
+    </button>
+  }
+</nav>

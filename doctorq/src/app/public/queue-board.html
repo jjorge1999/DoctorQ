@@ -30,13 +30,13 @@
     </div>
 
     <div class="filters">
-      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+      <mat-form-field appearance="outline" subscriptSizing="dynamic" class="search-field">
         <mat-label>Search doctor or specialty</mat-label>
         <mat-icon matPrefix>search</mat-icon>
         <input matInput [value]="search()" (input)="onSearch($event)" placeholder="e.g. cardiology" />
       </mat-form-field>
 
-      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+      <mat-form-field appearance="outline" subscriptSizing="dynamic" class="hospital-field">
         <mat-label>Hospital</mat-label>
         <mat-select [value]="hospitalFilter()" (valueChange)="hospitalFilter.set($event)">
           <mat-option value="all">All hospitals</mat-option>
@@ -45,6 +45,13 @@
           }
         </mat-select>
       </mat-form-field>
+
+      <button class="hospital-filter-trigger" (click)="openHospitalFilter()">
+        <mat-icon>tune</mat-icon>
+        @if (hospitalFilter() !== 'all') {
+          <span class="filter-chip">{{ activeHospitalName() }}</span>
+        }
+      </button>
     </div>
   </div>
 
@@ -60,7 +67,7 @@
       </p>
     </div>
   } @else {
-    <div class="grid">
+    <div class="grid" [@cardStagger]="visible().length" [@.disabled]="prefersReducedMotion">
       @for (entry of visible(); track entry.session.id) {
         <a class="card surface-card" [routerLink]="['/q', entry.session.id]">
           <div class="card-head">
@@ -92,13 +99,13 @@
             </span>
           </div>
 
-          <div class="now">
+          <div class="now" [style.view-transition-name]="'queue-number-' + entry.session.id">
             <div class="now-label">Now serving</div>
-            <div class="now-number numeral">
+            <div class="now-number">
               @if (entry.session.nowServing > 0) {
-                {{ entry.session.nowServing }}
+                <app-live-number [value]="entry.session.nowServing" />
               } @else {
-                <span class="not-started">—</span>
+                <span class="not-started numeral">—</span>
               }
             </div>
             @if (entry.session.nowServing === 0) {

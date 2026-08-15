@@ -14,7 +14,9 @@ import { DirectoryService } from '../core/directory.service';
 import { QueueBoardEntry, QueueStatus } from '../core/models';
 import { QueueService } from '../core/queue.service';
 import { confirmDialog, formDialog } from '../shared/dialog';
+import { LiveNumber } from '../shared/live-number';
 import { StatusChip } from '../shared/status-chip';
+import { SwipeReveal } from '../shared/swipe-reveal';
 import { ConfirmDialog } from './confirm-dialog';
 import { QueueDialog } from './queue-dialog';
 
@@ -29,7 +31,9 @@ import { QueueDialog } from './queue-dialog';
     MatMenuModule,
     MatProgressSpinnerModule,
     MatTooltipModule,
+    LiveNumber,
     StatusChip,
+    SwipeReveal,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './queue-control.html',
@@ -100,7 +104,8 @@ export class QueueControl {
   }
 
   async callNext(entry: QueueBoardEntry): Promise<void> {
-    await this.run(entry.session.id, () => this.queue.callNext(entry.session.id));
+    const ok = await this.run(entry.session.id, () => this.queue.callNext(entry.session.id));
+    if (ok) this.vibrate();
   }
 
   /**
@@ -126,10 +131,11 @@ export class QueueControl {
       if (!confirmed) return;
     }
 
-    await this.run(entry.session.id, async () => {
+    const ok = await this.run(entry.session.id, async () => {
       await this.queue.callNumber(entry.session.id, number);
       this.snack.open(`Now serving ${number}.`, 'Dismiss');
     });
+    if (ok) this.vibrate();
   }
 
   async callPrevious(entry: QueueBoardEntry): Promise<void> {
@@ -158,13 +164,15 @@ export class QueueControl {
     await this.run(entry.session.id, () => this.queue.deleteSession(entry.session.id));
   }
 
-  private async run(id: string, action: () => Promise<unknown>): Promise<void> {
-    if (this.isBusy(id)) return;
+  private async run(id: string, action: () => Promise<unknown>): Promise<boolean> {
+    if (this.isBusy(id)) return false;
     this.pending.update((set) => new Set(set).add(id));
     try {
       await action();
+      return true;
     } catch (err) {
       this.snack.open(err instanceof Error ? err.message : 'That action failed.', 'Dismiss');
+      return false;
     } finally {
       this.pending.update((set) => {
         const next = new Set(set);
@@ -172,5 +180,10 @@ export class QueueControl {
         return next;
       });
     }
+  }
+
+  /** Progressive enhancement only — silently absent where the Vibration API doesn't exist (iOS Safari). */
+  private vibrate(): void {
+    if (typeof navigator.vibrate === 'function') navigator.vibrate(10);
   }
 }
