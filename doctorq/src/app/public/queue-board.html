@@ -67,7 +67,7 @@
       </p>
     </div>
   } @else {
-    <div class="grid">
+    <div class="grid" [@cardStagger]="visible().length" [@.disabled]="prefersReducedMotion">
       @for (entry of visible(); track entry.session.id) {
         <a class="card surface-card" [routerLink]="['/q', entry.session.id]">
           <div class="card-head">

@@ -1,6 +1,7 @@
 import { DatePipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { animate, query, stagger, style, transition, trigger } from '@angular/animations';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
@@ -16,6 +17,24 @@ import { HospitalFilterSheet } from './hospital-filter-sheet';
 import { LiveNumber } from '../shared/live-number';
 import { PublicHeader } from '../shared/public-header';
 import { StatusChip } from '../shared/status-chip';
+
+const CARD_STAGGER = trigger('cardStagger', [
+  transition('* => *', [
+    query(
+      ':enter',
+      [
+        style({ opacity: 0, transform: 'translateY(14px)' }),
+        stagger(45, [
+          animate(
+            '340ms cubic-bezier(0.16, 1, 0.3, 1)',
+            style({ opacity: 1, transform: 'translateY(0)' }),
+          ),
+        ]),
+      ],
+      { optional: true },
+    ),
+  ]),
+]);
 
 @Component({
   selector: 'app-queue-board',
@@ -33,6 +52,7 @@ import { StatusChip } from '../shared/status-chip';
     StatusChip,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  animations: [CARD_STAGGER],
   templateUrl: './queue-board.html',
   styleUrl: './queue-board.scss',
 })
@@ -62,6 +82,9 @@ export class QueueBoard {
   });
 
   readonly openCount = computed(() => this.visible().filter((e) => e.acceptingNewPatients).length);
+
+  readonly prefersReducedMotion =
+    typeof matchMedia === 'function' ? matchMedia('(prefers-reduced-motion: reduce)').matches : false;
 
   private readonly bottomSheet = inject(MatBottomSheet);
 

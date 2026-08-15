@@ -1,5 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
+import { provideNoopAnimations } from '@angular/platform-browser/animations';
 import { of } from 'rxjs';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { QueueBoard } from './queue-board';
@@ -17,6 +18,7 @@ describe('QueueBoard hospital filter', () => {
     TestBed.configureTestingModule({
       providers: [
         provideRouter([]),
+        provideNoopAnimations(),
         { provide: QueueService, useValue: { board$: of([]) } },
         { provide: DirectoryService, useValue: { hospitals$: of(hospitals) } },
         { provide: MatBottomSheet, useValue: { open } },
@@ -55,5 +57,30 @@ describe('QueueBoard hospital filter', () => {
     const { component } = setup();
     component.hospitalFilter.set('h-2');
     expect(component.activeHospitalName()).toBe('Makati Medical Center');
+  });
+});
+
+describe('QueueBoard reduced motion', () => {
+  function setupWithMatchMedia(matches: boolean) {
+    (globalThis as any).matchMedia = vi.fn().mockReturnValue({ matches });
+    TestBed.configureTestingModule({
+      providers: [
+        provideRouter([]),
+        provideNoopAnimations(),
+        { provide: QueueService, useValue: { board$: of([]) } },
+        { provide: DirectoryService, useValue: { hospitals$: of([]) } },
+      ],
+    });
+    const fixture = TestBed.createComponent(QueueBoard);
+    fixture.detectChanges();
+    return fixture.componentInstance;
+  }
+
+  it('reads prefers-reduced-motion from matchMedia', () => {
+    expect(setupWithMatchMedia(true).prefersReducedMotion).toBe(true);
+  });
+
+  it('defaults to false when the system has no preference', () => {
+    expect(setupWithMatchMedia(false).prefersReducedMotion).toBe(false);
   });
 });

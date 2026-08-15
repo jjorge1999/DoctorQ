@@ -126,6 +126,12 @@
     outline: 2px solid var(--mat-sys-primary);
     outline-offset: 2px;
   }
+
+  &:active {
+    transform: scale(0.98);
+    box-shadow: 0 4px 14px -10px rgb(0 0 0 / 0.4);
+    transition-duration: 80ms;
+  }
 }
 
 .card-head {
@@ -360,5 +366,12 @@
 
   .hero-inner p {
     font-size: 0.92rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card:active {
+    transform: none;
+    opacity: 0.85;
   }
 }
