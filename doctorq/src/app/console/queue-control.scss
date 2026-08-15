@@ -43,6 +43,58 @@
   padding: 22px;
 }
 
+.swipe-card {
+  position: relative;
+  overflow: hidden;
+  padding: 0;
+}
+
+.swipe-actions {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.swipe-action {
+  width: 74px;
+  display: grid;
+  place-items: center;
+  gap: 2px;
+  border: none;
+  color: #fff;
+  font-size: 0.68rem;
+  font-weight: 600;
+
+  mat-icon {
+    width: 22px;
+    height: 22px;
+    font-size: 22px;
+  }
+
+  &.call {
+    background: var(--status-open);
+  }
+
+  &.pause {
+    background: var(--status-paused);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+  }
+}
+
+.swipe-surface {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 22px;
+  background: var(--mat-sys-surface);
+}
+
 header {
   display: flex;
   flex-direction: column;
@@ -259,5 +311,18 @@ footer {
 
   .serving {
     width: 100%;
+  }
+}
+
+.num-chip:active,
+footer button:active {
+  transform: scale(0.94);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .num-chip:active,
+  footer button:active {
+    transform: none;
+    opacity: 0.8;
   }
 }

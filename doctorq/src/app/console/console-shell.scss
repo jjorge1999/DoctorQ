@@ -313,6 +313,9 @@ nav {
 
   .tabbar {
     display: flex;
+    // Overrides the bare `nav { flex-direction: column }` rule above (written for the
+    // sidebar's <nav>, which this element also happens to be) — this is a row of tabs.
+    flex-direction: row;
     align-items: stretch;
     gap: 2px;
     padding: 6px 8px calc(6px + env(safe-area-inset-bottom));
