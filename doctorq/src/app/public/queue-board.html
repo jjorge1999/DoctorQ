@@ -30,13 +30,13 @@
     </div>
 
     <div class="filters">
-      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+      <mat-form-field appearance="outline" subscriptSizing="dynamic" class="search-field">
         <mat-label>Search doctor or specialty</mat-label>
         <mat-icon matPrefix>search</mat-icon>
         <input matInput [value]="search()" (input)="onSearch($event)" placeholder="e.g. cardiology" />
       </mat-form-field>
 
-      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+      <mat-form-field appearance="outline" subscriptSizing="dynamic" class="hospital-field">
         <mat-label>Hospital</mat-label>
         <mat-select [value]="hospitalFilter()" (valueChange)="hospitalFilter.set($event)">
           <mat-option value="all">All hospitals</mat-option>
@@ -45,6 +45,13 @@
           }
         </mat-select>
       </mat-form-field>
+
+      <button class="hospital-filter-trigger" (click)="openHospitalFilter()">
+        <mat-icon>tune</mat-icon>
+        @if (hospitalFilter() !== 'all') {
+          <span class="filter-chip">{{ activeHospitalName() }}</span>
+        }
+      </button>
     </div>
   </div>
 

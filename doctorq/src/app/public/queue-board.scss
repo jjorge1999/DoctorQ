@@ -297,12 +297,68 @@
   color: var(--mat-sys-on-surface-variant);
 }
 
-@media (max-width: 600px) {
-  .filters {
-    width: 100%;
+.hospital-filter-trigger {
+  display: none;
+}
 
-    mat-form-field {
-      flex: 1 1 100%;
+@media (max-width: 767px) {
+  .filters {
+    position: sticky;
+    top: 62px;
+    z-index: 9;
+    width: 100%;
+    padding: 10px 0;
+    background: color-mix(in srgb, var(--mat-sys-surface) 92%, transparent);
+    backdrop-filter: blur(10px);
+  }
+
+  .search-field {
+    flex: 1 1 auto;
+  }
+
+  .hospital-field {
+    display: none;
+  }
+
+  .hospital-filter-trigger {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    flex: none;
+    height: 44px;
+    padding: 0 14px;
+    border: 1px solid var(--app-border);
+    border-radius: 999px;
+    background: var(--mat-sys-surface);
+    color: var(--mat-sys-on-surface);
+    font: inherit;
+
+    &:active {
+      background: color-mix(in srgb, var(--mat-sys-primary) 8%, transparent);
     }
+  }
+
+  .filter-chip {
+    max-width: 120px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--mat-sys-primary);
+  }
+
+  // Condensed hero — the fold shouldn't be dominated by hero text before any clinic is visible.
+  .hero {
+    padding: 32px 20px 28px;
+  }
+
+  .hero-inner h1 {
+    margin: 12px 0 8px;
+    max-width: 22ch;
+  }
+
+  .hero-inner p {
+    font-size: 0.92rem;
   }
 }

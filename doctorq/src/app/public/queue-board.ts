@@ -7,10 +7,12 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSelectModule } from '@angular/material/select';
+import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { RouterLink } from '@angular/router';
 import { DirectoryService } from '../core/directory.service';
 import { QueueBoardEntry } from '../core/models';
 import { QueueService } from '../core/queue.service';
+import { HospitalFilterSheet } from './hospital-filter-sheet';
 import { LiveNumber } from '../shared/live-number';
 import { PublicHeader } from '../shared/public-header';
 import { StatusChip } from '../shared/status-chip';
@@ -60,6 +62,21 @@ export class QueueBoard {
   });
 
   readonly openCount = computed(() => this.visible().filter((e) => e.acceptingNewPatients).length);
+
+  private readonly bottomSheet = inject(MatBottomSheet);
+
+  readonly activeHospitalName = computed(
+    () => this.hospitals().find((h) => h.id === this.hospitalFilter())?.name ?? '',
+  );
+
+  openHospitalFilter(): void {
+    const ref = this.bottomSheet.open(HospitalFilterSheet, {
+      data: { hospitals: this.hospitals(), selected: this.hospitalFilter() },
+    });
+    ref.afterDismissed().subscribe((hospitalId) => {
+      if (hospitalId) this.hospitalFilter.set(hospitalId);
+    });
+  }
 
   initials(name = ''): string {
     return (
