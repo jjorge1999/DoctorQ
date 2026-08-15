@@ -9,7 +9,10 @@
     "test": "ng test",
     "emulators": "firebase emulators:start --only auth,firestore --project demo-doctorq",
     "seed": "node tools/seed.mjs",
-    "dev": "ng serve --open"
+    "dev": "ng serve --open",
+    "deploy": "npm run deploy:backend && npm run deploy:frontend",
+    "deploy:backend": "firebase deploy --only firestore",
+    "deploy:frontend": "npm run build && wrangler pages deploy dist/doctorq/browser --project-name=doctorq"
   },
   "private": true,
   "packageManager": "npm@8.19.4",
@@ -34,6 +37,7 @@
     "jsdom": "^28.0.0",
     "prettier": "^3.8.1",
     "typescript": "~6.0.2",
-    "vitest": "^4.0.8"
+    "vitest": "^4.0.8",
+    "wrangler": "^4.60.0"
   }
 }
