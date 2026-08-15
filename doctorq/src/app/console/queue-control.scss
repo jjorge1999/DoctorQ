@@ -44,14 +44,16 @@
 }
 
 .swipe-card {
-  position: relative;
+  // A grid with both children in the same cell guarantees they share one resolved box —
+  // position:absolute + inset:0 alone can leave a sub-pixel gap once a sibling has its own
+  // transform (as .swipe-surface always does), which promotes it to its own layout box.
+  display: grid;
   overflow: hidden;
   padding: 0;
 }
 
 .swipe-actions {
-  position: absolute;
-  inset: 0;
+  grid-area: 1 / 1;
   display: flex;
   justify-content: flex-end;
 }
@@ -86,7 +88,7 @@
 }
 
 .swipe-surface {
-  position: relative;
+  grid-area: 1 / 1;
   z-index: 1;
   display: flex;
   flex-direction: column;
