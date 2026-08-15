@@ -94,7 +94,7 @@
             </span>
           </div>
 
-          <div class="now">
+          <div class="now" [style.view-transition-name]="'queue-number-' + entry.session.id">
             <div class="now-label">Now serving</div>
             <div class="now-number">
               @if (entry.session.nowServing > 0) {

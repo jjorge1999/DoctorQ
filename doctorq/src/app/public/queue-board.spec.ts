@@ -58,6 +58,31 @@ describe('QueueBoard hospital filter', () => {
     component.hospitalFilter.set('h-2');
     expect(component.activeHospitalName()).toBe('Makati Medical Center');
   });
+
+  it('gives each card a view-transition-name matching its queue id', () => {
+    const boardEntry = {
+      session: { id: 'q-9', hospitalId: 'h-1', nowServing: 1 },
+      doctor: undefined,
+      hospital: undefined,
+      waiting: 0,
+      acceptingNewPatients: true,
+      slotsLeft: null,
+      estimatedWaitMinutes: 0,
+    };
+    TestBed.configureTestingModule({
+      providers: [
+        provideRouter([]),
+        provideNoopAnimations(),
+        { provide: QueueService, useValue: { board$: of([boardEntry]) } },
+        { provide: DirectoryService, useValue: { hospitals$: of([]) } },
+      ],
+    });
+    const fixture = TestBed.createComponent(QueueBoard);
+    fixture.detectChanges();
+
+    const el = fixture.nativeElement.querySelector('.now') as HTMLElement;
+    expect(el.style.getPropertyValue('view-transition-name')).toBe('queue-number-q-9');
+  });
 });
 
 describe('QueueBoard reduced motion', () => {

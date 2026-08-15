@@ -11,18 +11,18 @@
   } @else if (entry(); as e) {
     <div class="layout">
       <section class="main-col">
-        <div class="display surface-card">
+        <div class="display surface-card" [style.view-transition-name]="'queue-number-' + id()">
           <div class="display-top">
             <app-status-chip [status]="e.session.status" [full]="e.slotsLeft === 0" />
             <span class="stamp">Updated {{ e.session.updatedAt | date: 'h:mm a' }}</span>
           </div>
 
           <div class="now-label">Now serving</div>
-          <div class="now-number numeral">
+          <div class="now-number">
             @if (e.session.nowServing > 0) {
-              {{ e.session.nowServing }}
+              <app-live-number [value]="e.session.nowServing" />
             } @else {
-              <span class="not-started">—</span>
+              <span class="not-started numeral">—</span>
             }
           </div>
           @if (e.session.nowServing === 0) {
@@ -52,7 +52,7 @@
         </div>
 
         @if (advice(); as a) {
-          <div class="advice" [class]="a.tone">
+          <div class="advice" [class]="a.tone" [@adviceFade]="a.tone" [@.disabled]="prefersReducedMotion">
             <mat-icon>
               {{
                 a.tone === 'open'
