@@ -4,6 +4,7 @@ import { provideNoopAnimations } from '@angular/platform-browser/animations';
 import { of } from 'rxjs';
 import { QueueDetail } from './queue-detail';
 import { QueueService } from '../core/queue.service';
+import { AuthService } from '../core/auth.service';
 
 describe('QueueDetail', () => {
   const entry = {
@@ -38,6 +39,7 @@ describe('QueueDetail', () => {
         provideRouter([]),
         provideNoopAnimations(),
         { provide: QueueService, useValue: { entry$: () => of(entry) } },
+        { provide: AuthService, useValue: { isSignedIn: () => false } },
       ],
     });
     const fixture = TestBed.createComponent(QueueDetail);

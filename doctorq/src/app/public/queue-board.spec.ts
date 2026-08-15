@@ -6,6 +6,9 @@ import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { QueueBoard } from './queue-board';
 import { QueueService } from '../core/queue.service';
 import { DirectoryService } from '../core/directory.service';
+import { AuthService } from '../core/auth.service';
+
+const AUTH_STUB = { provide: AuthService, useValue: { isSignedIn: () => false } };
 
 describe('QueueBoard hospital filter', () => {
   const hospitals = [
@@ -22,6 +25,7 @@ describe('QueueBoard hospital filter', () => {
         { provide: QueueService, useValue: { board$: of([]) } },
         { provide: DirectoryService, useValue: { hospitals$: of(hospitals) } },
         { provide: MatBottomSheet, useValue: { open } },
+        AUTH_STUB,
       ],
     });
     const fixture = TestBed.createComponent(QueueBoard);
@@ -75,6 +79,7 @@ describe('QueueBoard hospital filter', () => {
         provideNoopAnimations(),
         { provide: QueueService, useValue: { board$: of([boardEntry]) } },
         { provide: DirectoryService, useValue: { hospitals$: of([]) } },
+        AUTH_STUB,
       ],
     });
     const fixture = TestBed.createComponent(QueueBoard);
@@ -94,6 +99,7 @@ describe('QueueBoard reduced motion', () => {
         provideNoopAnimations(),
         { provide: QueueService, useValue: { board$: of([]) } },
         { provide: DirectoryService, useValue: { hospitals$: of([]) } },
+        AUTH_STUB,
       ],
     });
     const fixture = TestBed.createComponent(QueueBoard);
