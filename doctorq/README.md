@@ -113,7 +113,7 @@ must never carry patient information; the console says so at the point of entry.
 ```bash
 npm install
 npm run emulators   # terminal 1 — Auth on :9099, Firestore on :8080 (needs Java)
-npm run seed        # terminal 2 — 3 hospitals, 4 doctors, 4 queues for today
+npm run seed        # terminal 2 — 20 hospitals, 100 doctors, 100 queues for today
 npm start           # terminal 2 — http://localhost:4200
 ```
 

@@ -149,6 +149,32 @@ const hospitals = [
   },
 ];
 
+// Fourteen more hospitals so 100 doctors spread out realistically (20 in total).
+[
+  ['Philippine General Hospital', 'Taft Ave, Ermita', 'Manila'],
+  ['St. Luke\'s Medical Center Global City', '32nd St cor 5th Ave, BGC', 'Taguig'],
+  ['Saint Luke\'s Hospital Extension', 'Cathedral Heights, E Rodriguez Sr. Ave', 'Quezon City'],
+  ['Victor R. Potenciano Medical Center', '89 Edsa, Mandaluyong', 'Mandaluyong'],
+  ['Capitol Medical Center', 'Scout Magbanua St, Sct. Borromeo', 'Quezon City'],
+  ['University of Santo Tomas Hospital', 'Espana Blvd, Sampaloc', 'Manila'],
+  ['Chinese General Hospital', '286 Blumentritt Rd, Sta. Cruz', 'Manila'],
+  ['Fatima University Medical Center', '120 McArthur Hwy, Valenzuela', 'Valenzuela'],
+  ['Las Pinas Doctors Hospital', 'Alabang-Zapote Rd, Las Pinas', 'Las Pinas'],
+  ['Pasig City General Hospital', 'Caruncho Ave, Pasig', 'Pasig'],
+  ['Marikina Valley Medical Center', 'Sumulong Hwy, Marikina', 'Marikina'],
+  ['Parañaque Community Hospital', 'Dr. A. Santos Ave, Paranaque', 'Paranaque'],
+  ['Antipolo Doctors Hospital', 'Sumulong Hwy, Antipolo', 'Rizal'],
+  ['Cebu Doctors University Hospital', 'Osmeña Blvd, Cebu City', 'Cebu'],
+].forEach(([name, address, city], i) => {
+  hospitals.push({
+    id: `h-extra${i + 1}`,
+    name,
+    address,
+    city,
+    phone: `+63 2 8${String(500 + i * 37).padStart(3, '0')} ${String(1000 + i * 113).slice(0, 4)}`,
+  });
+});
+
 /**
  * A formal doctor avatar, drawn locally rather than fetched from a stock-photo API: no photo
  * service reliably returns *doctors* (white coat, stethoscope) as opposed to generic headshots,
@@ -237,7 +263,34 @@ const extraDoctorSpecs = [
   photoUrl: photoUrl(4 + i),
 }));
 
-doctors.push(...extraDoctorSpecs);
+// Generated doctors to bring the total to TARGET_DOCTORS. Deterministic, so re-runs overwrite
+// the same documents.
+const TARGET_DOCTORS = 100;
+const firstNames = ['Maria', 'Jose', 'Ana', 'Juan', 'Rosa', 'Pedro', 'Elena', 'Luis', 'Carla', 'Marco',
+  'Isabel', 'Rafael', 'Teresa', 'Gabriel', 'Lourdes', 'Victor', 'Patricia', 'Eduardo', 'Cecilia', 'Antonio'];
+const lastNames = ['Dizon', 'Alvarez', 'Hernandez', 'Mercado', 'Valdez', 'Salazar', 'Domingo', 'Ocampo',
+  'Rivera', 'Soriano', 'Padilla', 'Aguilar', 'Bernardo', 'Fernandez', 'Lopez', 'Magno', 'Pineda', 'Tolentino'];
+const specialties = ['Cardiology', 'Paediatrics', 'Dermatology', 'Orthopaedics', 'Neurology',
+  'Otolaryngology (ENT)', 'Endocrinology', 'Psychiatry', 'Urology', 'Gastroenterology', 'Pulmonology',
+  'Nephrology', 'Ophthalmology', 'Family Medicine', 'General Surgery', 'Obstetrics & Gynaecology',
+  'Internal Medicine', 'Rheumatology', 'Hematology', 'Geriatrics'];
+const generatedSpecs = [];
+for (let n = doctors.length + extraDoctorSpecs.length; n < TARGET_DOCTORS; n++) {
+  const specialty = specialties[n % specialties.length];
+  const hospitalIds = [hospitals[(n * 7) % hospitals.length].id];
+  if (n % 5 === 0) hospitalIds.push(hospitals[(n * 7 + 3) % hospitals.length].id);
+  generatedSpecs.push({
+    id: `d-gen${String(n).padStart(3, '0')}`,
+    fullName: `Dr. ${firstNames[n % firstNames.length]} ${lastNames[(n * 3) % lastNames.length]}`,
+    specialty,
+    licenseNo: `PRC-${String(300000 + n * 17).padStart(7, '0')}`,
+    hospitalIds,
+    bio: `${specialty} consultations and follow-up care.`,
+    photoUrl: photoUrl(n),
+  });
+}
+
+doctors.push(...extraDoctorSpecs, ...generatedSpecs);
 
 // Deliberately varied so every state on the board is visible after seeding.
 const queues = [
@@ -308,6 +361,26 @@ queues.push(
       room: roomCycle[i % roomCycle.length],
       status,
       nowServing: status === 'cutoff' ? lastIssued : Math.max(1, lastIssued - 5),
+      lastIssued,
+      maxSlots: lastIssued + 5,
+      avgMinutesPerPatient: 10 + (i % 3) * 5,
+      startsAt: '08:00',
+      endsAt: '17:00',
+      note: status === 'paused' ? 'Doctor on a short break.' : '',
+    };
+  }),
+);
+
+queues.push(
+  ...generatedSpecs.map((d, i) => {
+    const status = statusCycle[(i + 1) % statusCycle.length];
+    const lastIssued = 5 + (i % 25);
+    return {
+      doctorId: d.id,
+      hospitalId: d.hospitalIds[0],
+      room: roomCycle[i % roomCycle.length],
+      status,
+      nowServing: status === 'cutoff' ? lastIssued : Math.max(1, lastIssued - 4),
       lastIssued,
       maxSlots: lastIssued + 5,
       avgMinutesPerPatient: 10 + (i % 3) * 5,
